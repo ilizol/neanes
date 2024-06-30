@@ -1870,6 +1870,7 @@ export default class Editor extends Vue {
   getLyricStyle(element: NoteElement) {
     return {
       direction: this.rtl ? 'rtl' : undefined,
+      //TODO check this
       top: withZoom(element.lyricsVerticalOffset),
       paddingLeft:
         element.lyricsHorizontalOffset > 0
@@ -7055,6 +7056,7 @@ export default class Editor extends Vue {
   .main-toolbar,
   .martyria-toolbar,
   .mode-key-toolbar,
+  .drop-cap-toolbar,
   .neume-toolbar,
   .tempo-toolbar,
   .text-box-toolbar,

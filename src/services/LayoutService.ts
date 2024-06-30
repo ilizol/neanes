@@ -116,6 +116,7 @@ export class LayoutService {
       `${pageSetup.neumeDefaultFontSize}px ${pageSetup.neumeDefaultFontFamily}`,
     );
 
+    //TODO check this
     const lyricsVerticalOffset = neumeHeight + pageSetup.lyricsVerticalOffset;
 
     const lyricHeight = TextMeasurementService.getFontHeight(
@@ -567,6 +568,9 @@ export class LayoutService {
               lyricsVerticalOffset + lyricHeight,
               pageSetup.lineHeight,
             );
+            //TODO check this
+            //obey always page line height
+            height = pageSetup.lineHeight;
           } else {
             height = pageSetup.lineHeight;
           }
@@ -622,6 +626,8 @@ export class LayoutService {
       element.line = page.lines.length;
       element.page = pages.length;
 
+      //TODO check this
+
       // Special logic to adjust drop caps.
       // This aligns the bottom of the drop cap with
       // the bottom of the lyrics.
@@ -642,6 +648,7 @@ export class LayoutService {
           fontHeight - distanceFromTopToBottomOfLyrics - fontBoundingBoxDescent;
 
         element.y -= adjustment;
+        // element.y += adjustment;
       }
 
       // Special case when lyrics are longer than the neume.
