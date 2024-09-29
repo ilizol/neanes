@@ -20,7 +20,9 @@
     "klitonDisabled": "Kliton may only be placed on Di",
     "spathiDisabled": "Spathi may only be placed on Ke or Ga",
     "width": "Width",
-    "height": "Height"
+    "height": "Height",
+    "marginTop": "Gap Above",
+    "marginBottom": "Gap Below"
   },
   "main": {
     "auto": "Auto",
@@ -28,6 +30,7 @@
     "single": "Single",
     "martyria": "Martyria",
     "insertDropCapBefore": "Insert drop cap before",
+    "insertModeKey": "Insert Mode Key",
     "insertTextBox": "Insert Text Box",
     "insertTextBoxRich": "Insert Rich Text Box",
     "insertImage": "Insert image",
@@ -38,7 +41,8 @@
     "deleteSelectedElement": "Delete selected element",
     "fit": "Fit",
     "speed": "Speed",
-    "pageNumber": "Page {{ currentPageNumber }} of {{ pageCount }}"
+    "pageNumber": "Page {{ currentPageNumber }} of {{ pageCount }}",
+    "invalidZoom": "The value must be between 50% and 500%."
   },
   "imageBox": {
     "inline": "Inline",

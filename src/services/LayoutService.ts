@@ -58,12 +58,7 @@ const emptyElementWidth = 39;
 interface GetNoteWidthArgs {
   lyricsVerticalOffset: number;
   vareiaWidth: number;
-  measureBarRightWidth: number;
-  measureBarTopWidth: number;
-  measureBarDoubleWidth: number;
-  measureBarTheseosWidth: number;
-  measureBarShortDoubleWidth: number;
-  measureBarShortTheseosWidth: number;
+  measureBarWidthMap: Map<MeasureBar, number>;
   runningElaphronWidth: number;
   elaphronWidth: number;
 }
@@ -123,6 +118,10 @@ export class LayoutService {
       pageSetup.lyricsFont,
     );
 
+    const lyricAscent = TextMeasurementService.getFontBoundingBoxAscent(
+      pageSetup.lyricsFont,
+    );
+
     const vareiaMapping = NeumeMappingService.getMapping(
       VocalExpressionNeume.Vareia,
     )!;
@@ -179,6 +178,23 @@ export class LayoutService {
       `${pageSetup.neumeDefaultFontSize}px ${pageSetup.neumeDefaultFontFamily}`,
     );
 
+    const measureBarWidthMap = new Map<MeasureBar, number>();
+    measureBarWidthMap.set(MeasureBar.MeasureBarRight, measureBarRightWidth);
+    measureBarWidthMap.set(MeasureBar.MeasureBarTop, measureBarTopWidth);
+    measureBarWidthMap.set(MeasureBar.MeasureBarDouble, measureBarDoubleWidth);
+    measureBarWidthMap.set(
+      MeasureBar.MeasureBarTheseos,
+      measureBarTheseosWidth,
+    );
+    measureBarWidthMap.set(
+      MeasureBar.MeasureBarShortDouble,
+      measureBarShortDoubleWidth,
+    );
+    measureBarWidthMap.set(
+      MeasureBar.MeasureBarShortTheseos,
+      measureBarShortTheseosWidth,
+    );
+
     const elaphronMapping = NeumeMappingService.getMapping(
       QuantitativeNeume.Elaphron,
     )!;
@@ -203,12 +219,7 @@ export class LayoutService {
     const noteWidthArgs: GetNoteWidthArgs = {
       lyricsVerticalOffset,
       vareiaWidth,
-      measureBarRightWidth,
-      measureBarTopWidth,
-      measureBarDoubleWidth,
-      measureBarTheseosWidth,
-      measureBarShortDoubleWidth,
-      measureBarShortTheseosWidth,
+      measureBarWidthMap,
       runningElaphronWidth,
       elaphronWidth,
     };
@@ -238,6 +249,7 @@ export class LayoutService {
       let elementWidthPx = 0;
       let elementWidthWithLyricsPx = 0;
       let additionalWidth = 0;
+      let marginTop = 0;
 
       const currentPageNumber = pages.length;
 
@@ -271,9 +283,13 @@ export class LayoutService {
             pageSetup,
             neumeHeight,
           );
+
+          marginTop = (element as TextBoxElement).marginTop;
           break;
         case ElementType.RichTextBox:
           elementWidthPx = pageSetup.innerPageWidth;
+
+          marginTop = (element as TextBoxElement).marginTop;
           break;
         case ElementType.ImageBox:
           {
@@ -312,6 +328,9 @@ export class LayoutService {
             TextMeasurementService.getFontHeight(
               `${modeKeyElement.computedFontSize}px ${modeKeyElement.computedFontFamily}`,
             ) + modeKeyElement.computedHeightAdjustment;
+
+          marginTop = modeKeyElement.marginTop;
+
           break;
         }
         case ElementType.Note: {
@@ -330,6 +349,7 @@ export class LayoutService {
           );
 
           const nextElement = elements[i + 1];
+          const nextNextElement = elements[i + 2];
 
           // Keep note and martyria together
           // and keep two tied notes together
@@ -343,26 +363,50 @@ export class LayoutService {
           ];
 
           const noteTied =
-            ties.includes(noteElement.vocalExpressionNeume!) ||
-            ties.includes(noteElement.tie!);
+            !noteElement.pageBreak &&
+            !noteElement.lineBreak &&
+            (ties.includes(noteElement.vocalExpressionNeume!) ||
+              ties.includes(noteElement.tie!));
 
           if (
-            nextElement != null &&
-            nextElement.elementType === ElementType.Martyria
+            nextElement?.elementType === ElementType.Martyria &&
+            !noteElement.pageBreak &&
+            !noteElement.lineBreak
           ) {
             additionalWidth =
               this.getMartyriaWidth(nextElement as MartyriaElement, pageSetup) +
               pageSetup.neumeDefaultSpacing;
-          } else if (
-            noteTied &&
-            nextElement?.elementType === ElementType.Note
-          ) {
-            additionalWidth =
-              this.getNoteWidth(
-                nextElement as NoteElement,
-                pageSetup,
-                noteWidthArgs,
-              ) + pageSetup.neumeDefaultSpacing;
+          } else if (nextElement?.elementType === ElementType.Note) {
+            const nextNote = nextElement as NoteElement;
+
+            if (noteTied) {
+              additionalWidth =
+                this.getNoteWidth(nextNote, pageSetup, noteWidthArgs) +
+                pageSetup.neumeDefaultSpacing;
+
+              // If the note is tied, we must check to make sure the next note
+              // isn't potentially getting a measure bar added to it.
+              if (nextNextElement?.elementType === ElementType.Note) {
+                const nextNextNote = nextNextElement as NoteElement;
+                if (
+                  nextNextNote.measureBarLeft != null &&
+                  !nextNextNote.measureBarLeft.endsWith('Above') &&
+                  nextNote.computedMeasureBarRight == null
+                ) {
+                  additionalWidth +=
+                    measureBarWidthMap.get(nextNextNote.measureBarLeft) ?? 0;
+                }
+              }
+            }
+
+            if (
+              nextNote.measureBarLeft != null &&
+              !nextNote.measureBarLeft.endsWith('Above') &&
+              noteElement.computedMeasureBarRight == null
+            ) {
+              additionalWidth +=
+                measureBarWidthMap.get(nextNote.measureBarLeft) ?? 0;
+            }
           }
           break;
         }
@@ -530,6 +574,10 @@ export class LayoutService {
               (x) => x.elementType === ElementType.TextBox,
             ) as TextBoxElement;
             height = textbox.height;
+
+            // Add the margins
+            height += textbox.marginTop;
+            height += textbox.marginBottom;
           } else if (
             line.elements.some((x) => x.elementType === ElementType.RichTextBox)
           ) {
@@ -537,6 +585,10 @@ export class LayoutService {
               (x) => x.elementType === ElementType.RichTextBox,
             ) as RichTextBoxElement;
             height = textbox.height;
+
+            // Add the margins
+            height += textbox.marginTop;
+            height += textbox.marginBottom;
           } else if (
             line.elements.some((x) => x.elementType === ElementType.ModeKey)
           ) {
@@ -544,6 +596,10 @@ export class LayoutService {
               (x) => x.elementType === ElementType.ModeKey,
             ) as ModeKeyElement;
             height = modekey.height;
+
+            // Add the margins
+            height += modekey.marginTop;
+            height += modekey.marginBottom;
           } else if (
             line.elements.some((x) => x.elementType === ElementType.ImageBox)
           ) {
@@ -619,6 +675,7 @@ export class LayoutService {
       element.y =
         pageSetup.topMargin +
         extraHeaderHeightPx +
+        marginTop +
         currentPageHeightPx -
         lastLineHeightPx;
       element.width = elementWidthPx;
@@ -633,19 +690,24 @@ export class LayoutService {
       // the bottom of the lyrics.
       if (element.elementType === ElementType.DropCap) {
         const distanceFromTopToBottomOfLyrics =
-          lyricsVerticalOffset + pageSetup.lyricsDefaultFontSize;
+          lyricsVerticalOffset + lyricAscent;
 
         const dropCapElement = element as DropCapElement;
 
         const fontHeight = TextMeasurementService.getFontHeight(
           dropCapElement.computedFont,
         );
-        const fontBoundingBoxDescent =
-          TextMeasurementService.getFontBoundingBoxDescent(
+        const fontBoundingBoxAscent =
+          TextMeasurementService.getFontBoundingBoxAscent(
             dropCapElement.computedFont,
           );
         const adjustment =
-          fontHeight - distanceFromTopToBottomOfLyrics - fontBoundingBoxDescent;
+          fontBoundingBoxAscent - distanceFromTopToBottomOfLyrics;
+
+        if (dropCapElement.computedLineHeight == null) {
+          dropCapElement.computedLineHeight =
+            fontHeight / dropCapElement.computedFontSize;
+        }
 
         element.y -= adjustment;
         // element.y += adjustment;
@@ -1179,12 +1241,7 @@ export class LayoutService {
     const {
       lyricsVerticalOffset,
       vareiaWidth,
-      measureBarRightWidth,
-      measureBarTopWidth,
-      measureBarDoubleWidth,
-      measureBarTheseosWidth,
-      measureBarShortDoubleWidth,
-      measureBarShortTheseosWidth,
+      measureBarWidthMap,
       runningElaphronWidth,
       elaphronWidth,
     } = args;
@@ -1227,46 +1284,24 @@ export class LayoutService {
     // are centered under the main neume
     const measureBarLeft =
       noteElement.measureBarLeft || noteElement.computedMeasureBarLeft;
-    if (measureBarLeft === MeasureBar.MeasureBarRight) {
-      noteElement.lyricsHorizontalOffset += measureBarRightWidth;
-      noteElement.neumeWidth += measureBarRightWidth;
-    } else if (measureBarLeft === MeasureBar.MeasureBarTop) {
-      noteElement.lyricsHorizontalOffset += measureBarTopWidth;
-      noteElement.neumeWidth += measureBarTopWidth;
-    } else if (measureBarLeft === MeasureBar.MeasureBarDouble) {
-      noteElement.lyricsHorizontalOffset += measureBarDoubleWidth;
-      noteElement.neumeWidth += measureBarDoubleWidth;
-    } else if (measureBarLeft === MeasureBar.MeasureBarTheseos) {
-      noteElement.lyricsHorizontalOffset += measureBarTheseosWidth;
-      noteElement.neumeWidth += measureBarTheseosWidth;
-    } else if (measureBarLeft === MeasureBar.MeasureBarShortDouble) {
-      noteElement.lyricsHorizontalOffset += measureBarShortDoubleWidth;
-      noteElement.neumeWidth += measureBarShortDoubleWidth;
-    } else if (measureBarLeft === MeasureBar.MeasureBarShortTheseos) {
-      noteElement.lyricsHorizontalOffset += measureBarShortTheseosWidth;
-      noteElement.neumeWidth += measureBarShortTheseosWidth;
+
+    const measureBarLeftWidth =
+      measureBarLeft != null ? measureBarWidthMap.get(measureBarLeft) : null;
+
+    if (measureBarLeftWidth != null) {
+      noteElement.lyricsHorizontalOffset += measureBarLeftWidth;
+      noteElement.neumeWidth += measureBarLeftWidth;
     }
 
     const measureBarRight =
       noteElement.measureBarRight || noteElement.computedMeasureBarRight;
-    if (measureBarRight === MeasureBar.MeasureBarRight) {
+
+    const measureBarRightWidth =
+      measureBarRight != null ? measureBarWidthMap.get(measureBarRight) : null;
+
+    if (measureBarRightWidth != null) {
       noteElement.lyricsHorizontalOffset -= measureBarRightWidth;
       noteElement.neumeWidth += measureBarRightWidth;
-    } else if (measureBarRight === MeasureBar.MeasureBarTop) {
-      noteElement.lyricsHorizontalOffset -= measureBarTopWidth;
-      noteElement.neumeWidth += measureBarTopWidth;
-    } else if (measureBarRight === MeasureBar.MeasureBarDouble) {
-      noteElement.lyricsHorizontalOffset -= measureBarDoubleWidth;
-      noteElement.neumeWidth += measureBarDoubleWidth;
-    } else if (measureBarRight === MeasureBar.MeasureBarTheseos) {
-      noteElement.lyricsHorizontalOffset -= measureBarTheseosWidth;
-      noteElement.neumeWidth += measureBarTheseosWidth;
-    } else if (measureBarRight === MeasureBar.MeasureBarShortDouble) {
-      noteElement.lyricsHorizontalOffset -= measureBarShortDoubleWidth;
-      noteElement.neumeWidth += measureBarShortDoubleWidth;
-    } else if (measureBarRight === MeasureBar.MeasureBarShortTheseos) {
-      noteElement.lyricsHorizontalOffset -= measureBarShortTheseosWidth;
-      noteElement.neumeWidth += measureBarShortTheseosWidth;
     }
 
     // Handle special case for running elaphron:
@@ -1765,6 +1800,10 @@ export class LayoutService {
               }
 
               element.melismaWidth = Math.max(end - start, 0);
+
+              if (element.melismaWidth < pageSetup.lyricsMelismaCutoffWidth) {
+                element.melismaWidth = 0;
+              }
 
               // Calculate the distance from the alphabetic baseline to the bottom of the font bounding box
               element.melismaOffsetTop =

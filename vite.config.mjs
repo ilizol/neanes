@@ -3,7 +3,6 @@ const require = createRequire(import.meta.url);
 
 import { rmSync } from 'node:fs';
 
-import ckeditor5 from '@ckeditor/vite-plugin-ckeditor5';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
@@ -37,6 +36,9 @@ export default defineConfig(({ command, mode }) => {
       mode === 'web'
         ? VitePWA({
             registerType: null, // We'll inject the service worker ourselves
+            workbox: {
+              maximumFileSizeToCacheInBytes: 3000000,
+            },
             includeAssets: [
               'favicon-32.png',
               'favicon-16.png',
@@ -105,7 +107,6 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       process.env.VITE_ENABLE_DEV_TOOLS === 'true' ? VueDevTools() : undefined,
       eslintPlugin(),
-      ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') }),
       !mode.includes('web')
         ? electron([
             {

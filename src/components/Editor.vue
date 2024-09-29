@@ -24,6 +24,7 @@
       @toggle-line-break="toggleLineBreak($event)"
       @add-tempo="addTempo"
       @add-drop-cap="addDropCap(false)"
+      @add-mode-key="onFileMenuInsertModeKey"
       @add-text-box="onFileMenuInsertTextBox"
       @add-text-box-rich="onFileMenuInsertRichTextBox"
       @add-image="onClickAddImage"
@@ -685,6 +686,12 @@
         @update:customHeight="
           updateTextBoxHeight(selectedTextBoxElement, $event)
         "
+        @update:marginTop="
+          updateTextBoxMarginTop(selectedTextBoxElement, $event)
+        "
+        @update:marginBottom="
+          updateTextBoxMarginBottom(selectedTextBoxElement, $event)
+        "
         @insert:gorthmikon="insertGorthmikon"
         @insert:pelastikon="insertPelastikon"
       />
@@ -692,8 +699,15 @@
     <template v-if="selectedRichTextBoxElement != null">
       <ToolbarTextBoxRich
         :element="selectedRichTextBoxElement"
+        :pageSetup="score.pageSetup"
         @update:rtl="
           updateRichTextBox(selectedRichTextBoxElement, { rtl: $event })
+        "
+        @update:marginTop="
+          updateRichTextBoxMarginTop(selectedRichTextBoxElement, $event)
+        "
+        @update:marginBottom="
+          updateRichTextBoxMarginBottom(selectedRichTextBoxElement, $event)
         "
       />
     </template>
@@ -844,6 +858,12 @@
             selectedElement as ModeKeyElement,
             $event,
           )
+        "
+        @update:marginTop="
+          updateModeKeyMarginTop(selectedElement as ModeKeyElement, $event)
+        "
+        @update:marginBottom="
+          updateModeKeyMarginBottom(selectedElement as ModeKeyElement, $event)
         "
         @update:permanentEnharmonicZo="
           updateModeKeyPermanentEnharmonicZo(
@@ -1313,6 +1333,7 @@ export default class Editor extends Vue {
     klitonIntervals: [14, 12, 4],
 
     defaultAttractionZoMoria: -4,
+    defaultAttractionKeMoria: 5,
 
     volumeIson: -4,
     volumeMelody: 0,
@@ -1734,12 +1755,6 @@ export default class Editor extends Vue {
   }
 
   set zoom(zoom: number) {
-    if (zoom < 0.5) {
-      zoom = 0.5;
-    } else if (zoom > 2) {
-      zoom = 2;
-    }
-
     this.selectedWorkspace.zoom = zoom;
   }
 
@@ -2848,6 +2863,14 @@ export default class Editor extends Vue {
       }
     }
 
+    if (
+      this.platformService.isMac &&
+      this.isTextInputFocused() &&
+      !this.dialogOpen
+    ) {
+      this.onKeydownMac(event);
+    }
+
     if (this.selectedLyrics != null) {
       return this.onKeydownLyrics(event);
     }
@@ -3242,16 +3265,12 @@ export default class Editor extends Vue {
       return;
     }
 
-    if (!this.rtl && event.shiftKey && event.code !== 'Minus') {
-      return;
-    }
-
-    if (this.rtl && event.shiftKey && event.code !== 'KeyJ') {
-      return;
-    }
-
     switch (event.code) {
       case 'ArrowRight':
+        if (event.shiftKey) {
+          return;
+        }
+
         if (event.ctrlKey || event.metaKey) {
           !this.rtl
             ? this.moveToNextLyricBoxThrottled()
@@ -3269,6 +3288,10 @@ export default class Editor extends Vue {
         }
         break;
       case 'ArrowLeft':
+        if (event.shiftKey) {
+          return;
+        }
+
         if (event.ctrlKey || event.metaKey) {
           !this.rtl
             ? this.moveToPreviousLyricBoxThrottled()
@@ -3286,6 +3309,10 @@ export default class Editor extends Vue {
         }
         break;
       case 'ArrowUp':
+        if (event.shiftKey) {
+          return;
+        }
+
         if (event.ctrlKey || event.metaKey) {
           this.selectedElement = this.selectedLyrics;
           this.blurActiveElement();
@@ -3454,6 +3481,48 @@ export default class Editor extends Vue {
           this.moveLeftThrottled();
           handled = true;
         }
+        break;
+    }
+
+    if (handled) {
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Handles text editing functionality for macOS
+   */
+  onKeydownMac(event: KeyboardEvent) {
+    let handled = false;
+
+    if (!event.metaKey) {
+      return;
+    }
+
+    switch (event.code) {
+      case 'KeyA':
+        document.execCommand('selectAll');
+        handled = true;
+        break;
+      case 'KeyC':
+        document.execCommand('copy');
+        handled = true;
+        break;
+      case 'KeyV':
+        document.execCommand('paste');
+        handled = true;
+        break;
+      case 'KeyX':
+        document.execCommand('cut');
+        handled = true;
+        break;
+      case 'KeyZ':
+        if (event.shiftKey) {
+          document.execCommand('redo');
+        } else {
+          document.execCommand('undo');
+        }
+        handled = true;
         break;
     }
 
@@ -4978,6 +5047,17 @@ export default class Editor extends Vue {
     this.saveDebounced();
   }
 
+  updateRichTextBoxMarginTop(element: RichTextBoxElement, marginTop: number) {
+    this.updateRichTextBox(element, { marginTop });
+  }
+
+  updateRichTextBoxMarginBottom(
+    element: RichTextBoxElement,
+    marginBottom: number,
+  ) {
+    this.updateRichTextBox(element, { marginBottom });
+  }
+
   updateTextBox(element: TextBoxElement, newValues: Partial<TextBoxElement>) {
     this.commandService.execute(
       this.textBoxCommandFactory.create('update-properties', {
@@ -5064,6 +5144,14 @@ export default class Editor extends Vue {
     this.updateTextBox(element, { customHeight });
   }
 
+  updateTextBoxMarginTop(element: TextBoxElement, marginTop: number) {
+    this.updateTextBox(element, { marginTop });
+  }
+
+  updateTextBoxMarginBottom(element: TextBoxElement, marginBottom: number) {
+    this.updateTextBox(element, { marginBottom });
+  }
+
   updateModeKey(element: ModeKeyElement, newValues: Partial<ModeKeyElement>) {
     this.commandService.execute(
       this.modeKeyCommandFactory.create('update-properties', {
@@ -5073,6 +5161,14 @@ export default class Editor extends Vue {
     );
 
     this.save();
+  }
+
+  updateModeKeyMarginTop(element: ModeKeyElement, marginTop: number) {
+    this.updateModeKey(element, { marginTop });
+  }
+
+  updateModeKeyMarginBottom(element: ModeKeyElement, marginBottom: number) {
+    this.updateModeKey(element, { marginBottom });
   }
 
   updateModeKeyUseDefaultStyle(
@@ -5701,8 +5797,20 @@ export default class Editor extends Vue {
   }
 
   updateZoom(zoom: number) {
-    this.zoom = zoom;
-    this.zoomToFit = false;
+    if (zoom < 0.5 || zoom > 5) {
+      if (this.ipcService.isShowMessageBoxSupported()) {
+        this.ipcService.showMessageBox({
+          type: 'error',
+          title: 'Range overflow',
+          message: this.$t('toolbar:main:invalidZoom'),
+        });
+      } else {
+        alert(this.$t('toolbar:main:invalidZoom'));
+      }
+    } else {
+      this.zoom = zoom;
+      this.zoomToFit = false;
+    }
   }
 
   updateZoomToFit(zoomToFit: boolean) {
@@ -6442,7 +6550,7 @@ export default class Editor extends Vue {
 
     this.currentFilePath = null;
     this.score.staff.elements.unshift(
-      ...(TestFileGenerator.generateTestFile(testFileType) || []),
+      ...(TestFileGenerator.generateTestFile(testFileType, this.fonts) || []),
     );
     this.save();
   }
@@ -7058,6 +7166,7 @@ export default class Editor extends Vue {
   .mode-key-toolbar,
   .drop-cap-toolbar,
   .neume-toolbar,
+  .drop-cap-toolbar,
   .tempo-toolbar,
   .text-box-toolbar,
   .image-box-toolbar,
