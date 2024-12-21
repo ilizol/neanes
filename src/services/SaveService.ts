@@ -263,16 +263,13 @@ export class SaveService {
     if (e.elementType === ElementType.TextBox) {
       const element = new TextBoxElement_v1();
 
-      this.SaveTextBox(element as TextBoxElement_v1, e as TextBoxElement);
+      this.SaveTextBox(element, e as TextBoxElement);
 
       header.elements[0] = element;
     } else if (e.elementType === ElementType.RichTextBox) {
       const element = new RichTextBoxElement_v1();
 
-      this.SaveRichTextBox(
-        element as RichTextBoxElement_v1,
-        e as RichTextBoxElement,
-      );
+      this.SaveRichTextBox(element, e as RichTextBoxElement);
 
       header.elements[0] = element;
     }
@@ -285,16 +282,13 @@ export class SaveService {
     if (e.elementType === ElementType.TextBox) {
       const element = new TextBoxElement_v1();
 
-      this.SaveTextBox(element as TextBoxElement_v1, e as TextBoxElement);
+      this.SaveTextBox(element, e as TextBoxElement);
 
       footer.elements[0] = element;
     } else if (e.elementType === ElementType.RichTextBox) {
       const element = new RichTextBoxElement_v1();
 
-      this.SaveRichTextBox(
-        element as RichTextBoxElement_v1,
-        e as RichTextBoxElement,
-      );
+      this.SaveRichTextBox(element, e as RichTextBoxElement);
 
       footer.elements[0] = element;
     }
@@ -390,9 +384,11 @@ export class SaveService {
       element.tertiaryFthoraOffsetY = e.tertiaryFthoraOffsetY || undefined;
     }
 
-    if (e.chromaticFthoraNote != null) {
-      element.chromaticFthoraNote = e.chromaticFthoraNote;
-    }
+    element.chromaticFthoraNote = e.chromaticFthoraNote ?? undefined;
+    element.secondaryChromaticFthoraNote =
+      e.secondaryChromaticFthoraNote ?? undefined;
+    element.tertiaryChromaticFthoraNote =
+      e.tertiaryChromaticFthoraNote ?? undefined;
 
     if (e.accidental != null) {
       element.accidental = e.accidental;
@@ -912,7 +908,7 @@ export class SaveService {
 
       this.LoadTextBox_v1(
         scoreVersion,
-        element as TextBoxElement,
+        element,
         e as TextBoxElement_v1,
         pageSetup,
       );
@@ -921,10 +917,7 @@ export class SaveService {
     } else if (e.elementType === ElementType.RichTextBox) {
       const element = new RichTextBoxElement();
 
-      this.LoadRichTextBox_v1(
-        element as RichTextBoxElement,
-        e as RichTextBoxElement_v1,
-      );
+      this.LoadRichTextBox_v1(element, e as RichTextBoxElement_v1);
 
       header.elements[0] = element;
     }
@@ -944,7 +937,7 @@ export class SaveService {
 
       this.LoadTextBox_v1(
         scoreVersion,
-        element as TextBoxElement,
+        element,
         e as TextBoxElement_v1,
         pageSetup,
       );
@@ -953,10 +946,7 @@ export class SaveService {
     } else if (e.elementType === ElementType.RichTextBox) {
       const element = new RichTextBoxElement();
 
-      this.LoadRichTextBox_v1(
-        element as RichTextBoxElement,
-        e as RichTextBoxElement_v1,
-      );
+      this.LoadRichTextBox_v1(element, e as RichTextBoxElement_v1);
 
       footer.elements[0] = element;
     }
@@ -1081,9 +1071,10 @@ export class SaveService {
       element.tertiaryFthoraOffsetY = e.tertiaryFthoraOffsetY ?? null;
     }
 
-    if (e.chromaticFthoraNote != null) {
-      element.chromaticFthoraNote = e.chromaticFthoraNote;
-    }
+    element.chromaticFthoraNote = e.chromaticFthoraNote ?? null;
+    element.secondaryChromaticFthoraNote =
+      e.secondaryChromaticFthoraNote ?? null;
+    element.tertiaryChromaticFthoraNote = e.tertiaryChromaticFthoraNote ?? null;
 
     if (e.accidental != null) {
       element.accidental = e.accidental;

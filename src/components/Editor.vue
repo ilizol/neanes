@@ -903,6 +903,18 @@
         @update:chromaticFthoraNote="
           updateNoteChromaticFthoraNote(selectedElement as NoteElement, $event)
         "
+        @update:secondaryChromaticFthoraNote="
+          updateNoteSecondaryChromaticFthoraNote(
+            selectedElement as NoteElement,
+            $event,
+          )
+        "
+        @update:tertiaryChromaticFthoraNote="
+          updateNoteTertiaryChromaticFthoraNote(
+            selectedElement as NoteElement,
+            $event,
+          )
+        "
         @update:gorgon="setGorgon(selectedElement as NoteElement, $event)"
         @update:secondaryGorgon="
           setSecondaryGorgon(selectedElement as NoteElement, $event)
@@ -1056,7 +1068,9 @@
     <ExportDialog
       v-if="exportDialogIsOpen"
       :loading="exportInProgress"
+      :defaultFormat="exportFormat"
       @exportAsPng="exportAsPng"
+      @exportAsMusicXml="exportAsMusicXml"
       @close="closeExportDialog"
     />
     <template v-if="richTextBoxCalculation">
@@ -1088,7 +1102,9 @@ import ContentEditable from '@/components/ContentEditable.vue';
 import DropCap from '@/components/DropCap.vue';
 import EditorPreferencesDialog from '@/components/EditorPreferencesDialog.vue';
 import ExportDialog, {
+  ExportAsMusicXmlSettings,
   ExportAsPngSettings,
+  ExportFormat,
 } from '@/components/ExportDialog.vue';
 import FileMenuBar from '@/components/FileMenuBar.vue';
 import ImageBox from '@/components/ImageBox.vue';
@@ -1190,6 +1206,7 @@ import {
 } from '@/services/audio/PlaybackService';
 import { Command, CommandFactory } from '@/services/history/CommandService';
 import { ByzHtmlExporter } from '@/services/integration/ByzHtmlExporter';
+import { MusicXmlExporter } from '@/services/integration/MusicXmlExporter';
 import { IIpcService } from '@/services/ipc/IIpcService';
 import { LayoutService } from '@/services/LayoutService';
 import { LyricService } from '@/services/LyricService';
@@ -1257,6 +1274,7 @@ export default class Editor extends Vue {
   @Inject() readonly playbackService!: PlaybackService;
   @Inject() readonly textSearchService!: TextSearchService;
   @Inject() readonly lyricService!: LyricService;
+  @Inject() readonly musicXmlExporter!: MusicXmlExporter;
 
   searchTextQuery: string = '';
   searchTextPanelIsOpen = false;
@@ -1301,6 +1319,8 @@ export default class Editor extends Vue {
   pageSetupDialogIsOpen: boolean = false;
   editorPreferencesDialogIsOpen: boolean = false;
   exportDialogIsOpen: boolean = false;
+
+  exportFormat: ExportFormat = ExportFormat.PNG;
 
   clipboard: ScoreElement[] = [];
   textBoxFormat: Partial<TextBoxElement> | null = null;
@@ -1944,7 +1964,7 @@ export default class Editor extends Vue {
 
   getMelismaStyle(element: NoteElement) {
     return {
-      width: withZoom(element.melismaWidth!),
+      width: withZoom(element.melismaWidth),
       minHeight: element.lyricsUseDefaultStyle
         ? withZoom(this.score.pageSetup.lyricsDefaultFontSize)
         : withZoom(element.lyricsFontSize),
@@ -1955,7 +1975,7 @@ export default class Editor extends Vue {
     return {
       top: withZoom(element.melismaOffsetTop),
       height: withZoom(element.lyricsFontHeight),
-      width: withZoom(element.melismaWidth!),
+      width: withZoom(element.melismaWidth),
     };
   }
 
@@ -2110,6 +2130,10 @@ export default class Editor extends Vue {
       this.onFileMenuExportAsHtml,
     );
     EventBus.$on(
+      IpcMainChannels.FileMenuExportAsMusicXml,
+      this.onFileMenuExportAsMusicXml,
+    );
+    EventBus.$on(
       IpcMainChannels.FileMenuExportAsImage,
       this.onFileMenuExportAsImage,
     );
@@ -2203,6 +2227,10 @@ export default class Editor extends Vue {
     EventBus.$off(
       IpcMainChannels.FileMenuExportAsHtml,
       this.onFileMenuExportAsHtml,
+    );
+    EventBus.$off(
+      IpcMainChannels.FileMenuExportAsMusicXml,
+      this.onFileMenuExportAsMusicXml,
     );
     EventBus.$off(
       IpcMainChannels.FileMenuExportAsImage,
@@ -4162,11 +4190,21 @@ export default class Editor extends Vue {
     // If there are none, then create a default workspace.
     const openWorkspaceResults = await this.ipcService.openWorkspaceFromArgv();
 
-    openWorkspaceResults
+    if (openWorkspaceResults.silentPdf) {
+      for (const file of openWorkspaceResults.files.filter((x) => x.success)) {
+        this.openScore(file);
+        await this.onFileMenuExportAsPdf();
+        this.removeWorkspace(this.selectedWorkspace);
+      }
+
+      await this.ipcService.exitApplication();
+    }
+
+    openWorkspaceResults.files
       .filter((x) => x.success)
       .forEach((x) => this.openScore(x));
 
-    if (openWorkspaceResults.some((x) => x.success)) {
+    if (openWorkspaceResults.files.some((x) => x.success)) {
       return;
     }
 
@@ -4268,7 +4306,7 @@ export default class Editor extends Vue {
 
       // If the last tab has closed, then exit
       if (this.workspaces.length == 1) {
-        this.ipcService.exitApplication();
+        await this.ipcService.exitApplication();
       }
 
       this.removeWorkspace(workspace);
@@ -4786,7 +4824,19 @@ export default class Editor extends Vue {
     element: NoteElement,
     secondaryFthora: Fthora | null,
   ) {
-    this.updateNote(element, { secondaryFthora });
+    let secondaryChromaticFthoraNote: ScaleNote | null = null;
+
+    if (secondaryFthora === Fthora.SoftChromaticThi_TopSecondary) {
+      secondaryChromaticFthoraNote = ScaleNote.Thi;
+    } else if (secondaryFthora === Fthora.SoftChromaticPa_TopSecondary) {
+      secondaryChromaticFthoraNote = ScaleNote.Ga;
+    } else if (secondaryFthora === Fthora.HardChromaticThi_TopSecondary) {
+      secondaryChromaticFthoraNote = ScaleNote.Thi;
+    } else if (secondaryFthora === Fthora.HardChromaticPa_TopSecondary) {
+      secondaryChromaticFthoraNote = ScaleNote.Pa;
+    }
+
+    this.updateNote(element, { secondaryFthora, secondaryChromaticFthoraNote });
     this.save();
   }
 
@@ -4794,7 +4844,19 @@ export default class Editor extends Vue {
     element: NoteElement,
     tertiaryFthora: Fthora | null,
   ) {
-    this.updateNote(element, { tertiaryFthora });
+    let tertiaryChromaticFthoraNote: ScaleNote | null = null;
+
+    if (tertiaryFthora === Fthora.SoftChromaticThi_TopTertiary) {
+      tertiaryChromaticFthoraNote = ScaleNote.Thi;
+    } else if (tertiaryFthora === Fthora.SoftChromaticPa_TopTertiary) {
+      tertiaryChromaticFthoraNote = ScaleNote.Ga;
+    } else if (tertiaryFthora === Fthora.HardChromaticThi_TopTertiary) {
+      tertiaryChromaticFthoraNote = ScaleNote.Thi;
+    } else if (tertiaryFthora === Fthora.HardChromaticPa_TopTertiary) {
+      tertiaryChromaticFthoraNote = ScaleNote.Pa;
+    }
+
+    this.updateNote(element, { tertiaryFthora, tertiaryChromaticFthoraNote });
     this.save();
   }
 
@@ -4928,6 +4990,22 @@ export default class Editor extends Vue {
     chromaticFthoraNote: ScaleNote | null,
   ) {
     this.updateNote(element, { chromaticFthoraNote });
+    this.save();
+  }
+
+  updateNoteSecondaryChromaticFthoraNote(
+    element: NoteElement,
+    secondaryChromaticFthoraNote: ScaleNote | null,
+  ) {
+    this.updateNote(element, { secondaryChromaticFthoraNote });
+    this.save();
+  }
+
+  updateNoteTertiaryChromaticFthoraNote(
+    element: NoteElement,
+    tertiaryChromaticFthoraNote: ScaleNote | null,
+  ) {
+    this.updateNote(element, { tertiaryChromaticFthoraNote });
     this.save();
   }
 
@@ -6064,16 +6142,16 @@ export default class Editor extends Vue {
     // blinking cursors don't show up in the printed page
     const activeElement = this.blurActiveElement();
 
-    nextTick(async () => {
-      await this.ipcService.exportWorkspaceAsPdf(this.selectedWorkspace);
-      this.printMode = false;
+    await nextTick();
+    await this.ipcService.exportWorkspaceAsPdf(this.selectedWorkspace);
+    this.printMode = false;
 
-      // Re-focus the active element
-      this.focusElement(activeElement);
-    });
+    // Re-focus the active element
+    this.focusElement(activeElement);
   }
 
   async onFileMenuExportAsImage() {
+    this.exportFormat = ExportFormat.PNG;
     this.exportDialogIsOpen = true;
   }
 
@@ -6114,6 +6192,7 @@ export default class Editor extends Vue {
             const options = {
               fontEmbedCSS,
               pixelRatio: args.dpi / 96,
+              style: { margin: '0' },
             } as any;
 
             if (args.transparentBackground) {
@@ -6229,6 +6308,22 @@ export default class Editor extends Vue {
       this.selectedWorkspace,
       this.byzHtmlExporter.exportScore(this.score),
     );
+  }
+
+  onFileMenuExportAsMusicXml() {
+    this.exportFormat = ExportFormat.MusicXml;
+    this.exportDialogIsOpen = true;
+  }
+
+  async exportAsMusicXml(args: ExportAsMusicXmlSettings) {
+    await this.ipcService.exportWorkspaceAsMusicXml(
+      this.selectedWorkspace,
+      this.musicXmlExporter.export(this.score, args.options),
+      args.compressed,
+      args.openFolder,
+    );
+
+    this.closeExportDialog();
   }
 
   blurActiveElement() {
