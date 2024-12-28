@@ -1556,6 +1556,8 @@ export class LayoutService {
             }
 
             continue;
+          } else if (element.lyrics.length > 0) {
+            melismaSyllables = null;
           }
 
           if (melismaSyllables != null) {
@@ -2397,7 +2399,7 @@ export class LayoutService {
       } else if (fthora.startsWith('DiatonicKe')) {
         fthoraNote = getScaleNoteValue(ScaleNote.Ke);
       } else if (fthora.startsWith('DiatonicZo')) {
-        fthoraNote = getScaleNoteValue(ScaleNote.Zo);
+        fthoraNote = getScaleNoteValue(ScaleNote.ZoHigh);
       } else if (fthora.startsWith('DiatonicNiHigh')) {
         fthoraNote = getScaleNoteValue(ScaleNote.NiHigh);
       } else if (fthora.startsWith('GeneralFlat')) {
