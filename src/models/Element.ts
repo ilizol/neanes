@@ -582,7 +582,9 @@ export class MartyriaElement extends ScoreElement {
   public scale: Scale = Scale.Diatonic;
   public fthora: Fthora | null = null;
   public chromaticFthoraNote: ScaleNote | null = null;
+  public tempoLeft: TempoSign | null = null;
   public tempo: TempoSign | null = null;
+  public tempoRight: TempoSign | null = null;
   public alignRight: boolean = false;
   public bpm: number = 0;
   public spaceAfter: number = 0;
@@ -795,6 +797,8 @@ export class TextBoxElement extends ScoreElement {
       strokeWidth: this.strokeWidth,
       customWidth: this.customWidth,
       customHeight: this.customHeight,
+      marginTop: this.marginTop,
+      marginBottom: this.marginBottom,
       inline: this.inline,
       bold: this.bold,
       italic: this.italic,
@@ -835,7 +839,14 @@ export class RichTextBoxElement extends ScoreElement {
   public getClipboardProperties() {
     return {
       content: this.content,
+      contentLeft: this.contentLeft,
+      contentRight: this.contentRight,
+      contentCenter: this.contentCenter,
+      rtl: this.rtl,
+      multipanel: this.multipanel,
       height: this.height,
+      marginBottom: this.marginBottom,
+      marginTop: this.marginTop,
     } as Partial<RichTextBoxElement>;
   }
 }
@@ -960,9 +971,12 @@ export class ModeKeyElement extends ScoreElement {
       fontSize: this.fontSize,
       strokeWidth: this.strokeWidth,
       heightAdjustment: this.heightAdjustment,
+      marginBottom: this.marginBottom,
+      marginTop: this.marginTop,
       useDefaultStyle: this.useDefaultStyle,
       ignoreAttractions: this.ignoreAttractions,
       permanentEnharmonicZo: this.permanentEnharmonicZo,
+      showAmbitus: this.showAmbitus,
     } as Partial<ModeKeyElement>;
   }
 }
