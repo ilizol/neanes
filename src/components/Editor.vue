@@ -4245,7 +4245,10 @@ export default class Editor extends Vue {
 
   async saveWorkspace(workspace: Workspace) {
     if (!this.lyricsLocked) {
-      this.lyrics = this.lyricService.extractLyrics(this.elements);
+      this.lyrics = this.lyricService.extractLyrics(
+        this.elements,
+        this.score.pageSetup.disableGreekMelismata,
+      );
     }
 
     return await this.ipcService.saveWorkspace(workspace);
@@ -4253,7 +4256,10 @@ export default class Editor extends Vue {
 
   async saveWorkspaceAs(workspace: Workspace) {
     if (!this.lyricsLocked) {
-      this.lyrics = this.lyricService.extractLyrics(this.elements);
+      this.lyrics = this.lyricService.extractLyrics(
+        this.elements,
+        this.score.pageSetup.disableGreekMelismata,
+      );
     }
 
     return await this.ipcService.saveWorkspaceAs(workspace);
@@ -5049,6 +5055,7 @@ export default class Editor extends Vue {
       this.lyrics,
       this.elements,
       this.rtl,
+      this.score.pageSetup.disableGreekMelismata,
       (note, lyrics) => this.setLyrics(this.getElementIndex(note), lyrics),
       (note, newValues) => {
         note.updated = true;
@@ -5080,6 +5087,7 @@ export default class Editor extends Vue {
 
     this.lyricService.assignAcceptsLyricsFromCurrentLyrics(
       this.elements,
+      this.score.pageSetup.disableGreekMelismata,
       (note, acceptsLyrics) => {
         commands.push(
           this.noteElementCommandFactory.create('update-properties', {
@@ -5129,7 +5137,10 @@ export default class Editor extends Vue {
     if (this.lyricsLocked) {
       this.assignLyrics();
     } else if (this.lyricManagerIsOpen) {
-      this.lyrics = this.lyricService.extractLyrics(this.elements);
+      this.lyrics = this.lyricService.extractLyrics(
+        this.elements,
+        this.score.pageSetup.disableGreekMelismata,
+      );
     }
   }
 
@@ -6655,7 +6666,12 @@ export default class Editor extends Vue {
       elements = [this.selectedLyrics];
     }
 
-    const html = this.byzHtmlExporter.exportElements(elements, 0, true);
+    const html = this.byzHtmlExporter.exportElements(
+      elements,
+      this.score.pageSetup,
+      0,
+      true,
+    );
 
     navigator.clipboard.writeText(html);
   }
@@ -6998,7 +7014,7 @@ export default class Editor extends Vue {
 }
 
 .selectedTextbox {
-  border: 1px solid goldenrod;
+  outline: 1px solid goldenrod;
 }
 
 .selectedTextbox:deep(.handle) {
@@ -7256,6 +7272,7 @@ export default class Editor extends Vue {
 .page.print .image-box-container,
 .page.print :deep(.text-box.multipanel) {
   border: none;
+  outline: none;
 }
 
 .page.print .page-break,
@@ -7308,22 +7325,27 @@ export default class Editor extends Vue {
 
   .text-box-container {
     border: none;
+    outline: none;
   }
 
   .drop-cap-container {
     border: none;
+    outline: none;
   }
 
   .mode-key-container {
     border: none;
+    outline: none;
   }
 
   .image-box-container {
     border: none;
+    outline: none;
   }
 
   .selectedLyrics {
     border: none;
+    outline: none;
   }
 
   .melisma-text {
