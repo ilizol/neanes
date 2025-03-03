@@ -106,6 +106,7 @@ export class LatexExporter {
       schemaVersion,
       sectionNames: [],
       fontVersions: {
+        Almouzios: fontService.getMetadata('Almouzios').fontVersion,
         Neanes: fontService.getMetadata('Neanes').fontVersion,
         NeanesRTL: fontService.getMetadata('NeanesRTL').fontVersion,
         NeanesStathisSeries: fontService.getMetadata('NeanesStathisSeries')
