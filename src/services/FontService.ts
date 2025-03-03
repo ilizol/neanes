@@ -1,4 +1,4 @@
-import metadataAlmouzios from '@/assets/fonts/Almouzios.metadata.json';
+import metadataAlmouzios from '@/assets/fonts/almouzios.metadata.json';
 import metadata from '@/assets/fonts/neanes.metadata.json';
 import metadataRtl from '@/assets/fonts/neanesrtl.metadata.json';
 import metadataStathis from '@/assets/fonts/neanesstathisseries.metadata.json';
