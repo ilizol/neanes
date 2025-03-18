@@ -205,6 +205,12 @@ export class SaveService {
 
     pageSetup.pageHeight = p.pageHeight;
     pageSetup.pageWidth = p.pageWidth;
+
+    if (p.pageSize === 'Custom') {
+      pageSetup.pageHeightCustom = p.pageHeightCustom;
+      pageSetup.pageWidthCustom = p.pageWidthCustom;
+    }
+
     pageSetup.rightMargin = p.rightMargin;
     pageSetup.topMargin = p.topMargin;
 
@@ -248,10 +254,13 @@ export class SaveService {
     pageSetup.landscape = p.landscape || undefined;
 
     pageSetup.hyphenSpacing = p.hyphenSpacing;
+    pageSetup.martyriaVerticalOffset = p.martyriaVerticalOffset;
 
     pageSetup.chrysanthineAccidentals = p.chrysanthineAccidentals;
     pageSetup.noFthoraRestrictions = p.noFthoraRestrictions || undefined;
     pageSetup.disableGreekMelismata = p.disableGreekMelismata || undefined;
+    pageSetup.useOptionalDiatonicFthoras =
+      p.useOptionalDiatonicFthoras || undefined;
   }
 
   public static SaveLyricSetup(lyricSetup: LyricSetup_v1, l: LyricSetup) {
@@ -340,6 +349,7 @@ export class SaveService {
     }
 
     element.spaceAfter = e.spaceAfter || undefined;
+    element.verticalOffset = e.verticalOffset || undefined;
   }
 
   public static SaveTempo(element: TempoElement_v1, e: TempoElement) {
@@ -736,6 +746,10 @@ export class SaveService {
     pageSetup.pageHeight = p.pageHeight;
     pageSetup.pageWidth = p.pageWidth;
 
+    pageSetup.pageHeightCustom =
+      p.pageHeightCustom ?? pageSetup.pageHeightCustom;
+    pageSetup.pageWidthCustom = p.pageWidth ?? pageSetup.pageWidthCustom;
+
     pageSetup.topMargin = p.topMargin;
     pageSetup.bottomMargin = p.bottomMargin;
     pageSetup.leftMargin = p.leftMargin;
@@ -878,23 +892,28 @@ export class SaveService {
     pageSetup.landscape = p.landscape === true;
 
     pageSetup.hyphenSpacing = p.hyphenSpacing;
+    pageSetup.martyriaVerticalOffset = p.martyriaVerticalOffset ?? 0; // for old files, use 0 so that we don't change the them
 
     pageSetup.chrysanthineAccidentals =
       p.chrysanthineAccidentals === true ||
       p.chrysanthineAccidentals === undefined;
     pageSetup.noFthoraRestrictions = p.noFthoraRestrictions === true;
     pageSetup.disableGreekMelismata = p.disableGreekMelismata === true;
+    pageSetup.useOptionalDiatonicFthoras =
+      p.useOptionalDiatonicFthoras === true;
 
     // Fix pageWidth and pageHeight
     // Due to bug #71, A-series paper sizes had incorrect width and height
-    const pageSize = pageSizes.find((x) => x.name === pageSetup.pageSize);
-    if (pageSize) {
-      if (pageSetup.landscape) {
-        pageSetup.pageWidth = pageSize.height;
-        pageSetup.pageHeight = pageSize.width;
-      } else {
-        pageSetup.pageWidth = pageSize.width;
-        pageSetup.pageHeight = pageSize.height;
+    if (pageSetup.pageSize !== 'Custom') {
+      const pageSize = pageSizes.find((x) => x.name === pageSetup.pageSize);
+      if (pageSize) {
+        if (pageSetup.landscape) {
+          pageSetup.pageWidth = pageSize.height;
+          pageSetup.pageHeight = pageSize.width;
+        } else {
+          pageSetup.pageWidth = pageSize.width;
+          pageSetup.pageHeight = pageSize.height;
+        }
       }
     }
   }
@@ -1004,6 +1023,7 @@ export class SaveService {
     element.rootSign = e.rootSign;
     element.rootSignOverride = e.rootSignOverride || null;
     element.spaceAfter = e.spaceAfter ?? 0;
+    element.verticalOffset = e.verticalOffset ?? 0;
 
     if (e.fthora != null) {
       element.fthora = e.fthora;

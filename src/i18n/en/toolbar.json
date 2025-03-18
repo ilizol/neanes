@@ -23,7 +23,8 @@
     "width": "Width",
     "height": "Height",
     "marginTop": "Gap Above",
-    "marginBottom": "Gap Below"
+    "marginBottom": "Gap Below",
+    "verticalOffset": "Vertical Offset"
   },
   "main": {
     "auto": "Auto",
@@ -74,7 +75,8 @@
     "rightAlignTempo": "Right-align tempo",
     "showAmbitus": "Show Ambitus",
     "permanentEnharmonicZo": "Permanent Enharmonic Zo",
-    "changeKey": "Change Key"
+    "changeKey": "Change Key",
+    "useOptionalDiatonicFthoras": "Show Diatonic Fthoras"
   },
   "neume": {
     "neumeSelect": "Neume Select",

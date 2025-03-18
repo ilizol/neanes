@@ -85,6 +85,7 @@ export interface FileMenuOpenScoreArgs {
 export interface OpenWorkspaceFromArgvArgs {
   files: FileMenuOpenScoreArgs[];
   silentPdf?: boolean;
+  silentHtml?: boolean;
   silentLatex?: boolean;
   silentLatexIncludeModeKeys?: boolean;
   silentLatexIncludeTextBoxes?: boolean;
@@ -145,11 +146,14 @@ export interface ExportWorkspaceAsPdfArgs {
   filePath: string | null;
   tempFileName: string;
   pageSize: PageSize;
+  pageWidthInches: number;
+  pageHeightInches: number;
   landscape: boolean;
 }
 
 export interface ExportWorkspaceAsHtmlArgs {
   filePath: string | null;
+  filePathFull: string | null;
   tempFileName: string;
   data: string;
 }
@@ -187,6 +191,8 @@ export interface ExportPageAsImageArgs {
 
 export interface PrintWorkspaceArgs {
   pageSize: PageSize;
+  pageWidthInches: number;
+  pageHeightInches: number;
   landscape: boolean;
 }
 

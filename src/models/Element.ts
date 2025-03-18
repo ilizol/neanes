@@ -589,6 +589,7 @@ export class MartyriaElement extends ScoreElement {
   public alignRight: boolean = false;
   public bpm: number = 0;
   public spaceAfter: number = 0;
+  public verticalOffset: number = 0;
 
   public error: boolean = false;
 
@@ -913,6 +914,7 @@ export class ModeKeyElement extends ScoreElement {
 
   public static createFromTemplate(
     template: ModeKeyTemplate,
+    useOptionalDiatonicFthoras?: boolean,
     alignment?: TextBoxAlignment,
   ) {
     const element = new ModeKeyElement();
@@ -936,6 +938,13 @@ export class ModeKeyElement extends ScoreElement {
       template.quantitativeNeumeAboveNote2 || null;
     element.quantitativeNeumeRight = template.quantitativeNeumeRight || null;
     element.alignment = alignment || TextBoxAlignment.Center;
+
+    if (
+      useOptionalDiatonicFthoras &&
+      template.optionalFthoras?.fthoraAboveNote != null
+    ) {
+      element.fthoraAboveNote = template.optionalFthoras.fthoraAboveNote;
+    }
 
     element.ignoreAttractions = false;
     element.permanentEnharmonicZo = false;

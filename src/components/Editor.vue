@@ -1092,6 +1092,12 @@
         @update:spaceAfter="
           updateMartyriaSpaceAfter(selectedElement as MartyriaElement, $event)
         "
+        @update:verticalOffset="
+          updateMartyriaVerticalOffset(
+            selectedElement as MartyriaElement,
+            $event,
+          )
+        "
         @update:rootSignOverride="
           updateMartyriaRootSignOverride(
             selectedElement as MartyriaElement,
@@ -1138,6 +1144,9 @@
       :pageSetup="score.pageSetup"
       @update="
         updateModeKeyFromTemplate(selectedElement as ModeKeyElement, $event)
+      "
+      @update:useOptionalDiatonicFthoras="
+        updatePageSetupUseOptionalDiatonicFthoras($event)
       "
       @close="closeModeKeyDialog"
     />
@@ -4339,6 +4348,14 @@ export default class Editor extends Vue {
       }
     }
 
+    if (openWorkspaceResults.silentHtml) {
+      for (const file of openWorkspaceResults.files.filter((x) => x.success)) {
+        this.openScore(file);
+        await this.onFileMenuExportAsHtml();
+        this.removeWorkspace(this.selectedWorkspace);
+      }
+    }
+
     if (openWorkspaceResults.silentLatex) {
       for (const file of openWorkspaceResults.files.filter((x) => x.success)) {
         const options = new LatexExporterOptions();
@@ -4363,7 +4380,11 @@ export default class Editor extends Vue {
       }
     }
 
-    if (openWorkspaceResults.silentPdf || openWorkspaceResults.silentLatex) {
+    if (
+      openWorkspaceResults.silentPdf ||
+      openWorkspaceResults.silentLatex ||
+      openWorkspaceResults.silentHtml
+    ) {
       await this.ipcService.exitApplication();
     }
 
@@ -5732,6 +5753,14 @@ export default class Editor extends Vue {
     this.save();
   }
 
+  updateMartyriaVerticalOffset(
+    element: MartyriaElement,
+    verticalOffset: number,
+  ) {
+    this.updateMartyria(element, { verticalOffset });
+    this.save();
+  }
+
   updateMartyriaRootSignOverride(
     element: MartyriaElement,
     rootSignOverride: RootSign,
@@ -6103,6 +6132,19 @@ export default class Editor extends Vue {
     if (needToRecalcRichTextBoxes) {
       this.recalculateRichTextBoxHeights();
     }
+
+    this.save();
+  }
+
+  updatePageSetupUseOptionalDiatonicFthoras(
+    useOptionalDiatonicFthoras: boolean,
+  ) {
+    this.commandService.execute(
+      this.pageSetupCommandFactory.create('update-properties', {
+        target: this.score.pageSetup,
+        newValues: { useOptionalDiatonicFthoras },
+      }),
+    );
 
     this.save();
   }
@@ -6970,6 +7012,7 @@ export default class Editor extends Vue {
   createDefaultModeKey(pageSetup: PageSetup) {
     const defaultTemplate = ModeKeyElement.createFromTemplate(
       modeKeyTemplates[0],
+      this.score.pageSetup.useOptionalDiatonicFthoras,
     );
 
     defaultTemplate.color = pageSetup.modeKeyDefaultColor;

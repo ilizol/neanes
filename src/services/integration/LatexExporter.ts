@@ -17,7 +17,10 @@ import { fontService } from '../FontService';
 import { NeumeMappingService, SbmuflGlyphName } from '../NeumeMappingService';
 import { TextMeasurementService } from '../TextMeasurementService';
 
-const schemaVersion = 1;
+const schemaVersion = 2;
+
+// Schema changes
+// 1 to 2: Positive lyricsVerticalOffset now moves lyrics down, making it consistent with other offsets in the schema
 
 export class LatexExporterOptions {
   includeModeKeys: boolean = false;
@@ -46,7 +49,7 @@ function getOffset(
   }
 
   x = x ?? 0;
-  y = x ?? 0;
+  y = y ?? 0;
 
   if (x == 0 && y == 0) {
     return undefined;
@@ -89,7 +92,7 @@ export class LatexExporter {
     pageSetup: PageSetup,
     options: LatexExporterOptions,
   ) {
-    const neumeAscent = TextMeasurementService.getFontBoundingBoxAscent(
+    const neumeDescent = TextMeasurementService.getFontBoundingBoxDescent(
       `${pageSetup.neumeDefaultFontSize}px ${pageSetup.neumeDefaultFontFamily}`,
     );
 
@@ -97,9 +100,39 @@ export class LatexExporter {
       pageSetup.lyricsFont,
     );
 
-    // TODO document this with a picture diagram explaining why this works
+    /* 
+**Calculating Lyrics Vertical Offset**
+Latex and Electron align adjacent characters in different ways.
+  - The browser aligns adjacent divs of different sizes by aligning the tops of the divs.
+  - Latex aligns by font baseline. 
+
+Below is a diagram that shows how pageSetup.lyricsVerticalOffset affects
+the lyrics position in Neanes. To translate to Latex, we must measure
+the distance between the neume and lyrics baselines.
+-----------------------------------------------------------------------
+                     +----------------+
+                     |     Neume      |
+                     |                |
+                     |                |
+Neume Baseline -->   |----------------|  ---
+                     |                |   |   <-- Neume Descent
+                     +----------------+  ---
+                                         ---
+                                          |
+                                          |   <-- Lyrics Vertical Offset (Neanes)
+                                          |
+                                         ---                       
+                     +----------------+  ---
+                     |     Lyrics     |   |  <-- Lyrics Ascent
+                     |                |   |
+Lyrics Baseline -->  |----------------|  ---
+                     |                |   
+                     +----------------+ 
+
+Distance Between Baselines = Lyrics Vertical Offset + Neume Descent + Lyrics Ascent 
+*/
     const lyricsVerticalOffset =
-      pageSetup.lyricsVerticalOffset + lyricAscent - neumeAscent;
+      pageSetup.lyricsVerticalOffset + neumeDescent + lyricAscent;
 
     const result: LatexScore = {
       appVersion: APP_VERSION,
@@ -114,6 +147,10 @@ export class LatexExporter {
       },
       pageSetup: {
         lineHeight: toPt(pageSetup.lineHeight),
+        martyriaVerticalOffset:
+          pageSetup.martyriaVerticalOffset != 0
+            ? toPt(pageSetup.martyriaVerticalOffset)
+            : undefined,
         fontFamilies: {
           dropCap: convertFontName(pageSetup.dropCapDefaultFontFamily),
           lyrics: convertFontName(pageSetup.lyricsDefaultFontFamily),
@@ -344,10 +381,15 @@ export class LatexExporter {
             resultLine.elements.push(noteInfo);
           } else if (element.elementType === ElementType.Martyria) {
             const martyria = element as MartyriaElement;
+
             resultLine.elements.push({
               type: 'martyria',
               x: toPt(element.x - pageSetup.leftMargin),
               width: toPt(martyria.neumeWidth),
+              verticalOffset:
+                martyria.verticalOffset != 0
+                  ? toPt(martyria.verticalOffset)
+                  : undefined,
               note: glyphName(martyria.note),
               rootSign: glyphName(martyria.rootSign),
               fthora: glyphName(martyria.fthora),
@@ -378,7 +420,7 @@ export class LatexExporter {
               const originalLineHeight = fontHeight / dropCap.computedFontSize;
 
               verticalAdjustment =
-                ((originalLineHeight - dropCap.lineHeight) *
+                ((dropCap.lineHeight - originalLineHeight) *
                   dropCap.computedFontSize) /
                 2;
             }
@@ -569,6 +611,7 @@ interface LatexSection {
 
 interface LatexPageSetup {
   lineHeight: number;
+  martyriaVerticalOffset?: number;
   fontFamilies: {
     dropCap: string;
     lyrics: string;
@@ -684,6 +727,7 @@ interface LatexNoteElement extends LatexBaseElement {
 
 interface LatexMartyriaElement extends LatexBaseElement {
   x: number;
+  verticalOffset?: number;
   note: SbmuflGlyphName;
   rootSign: SbmuflGlyphName;
   fthora?: SbmuflGlyphName;

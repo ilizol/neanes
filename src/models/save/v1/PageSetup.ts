@@ -8,7 +8,8 @@ export type PageSize =
   | 'Letter'
   | 'Tabloid'
   | 'Half-Letter'
-  | 'Half-Legal';
+  | 'Half-Legal'
+  | 'Custom';
 export type PageSizeUnit = 'pc' | 'pt' | 'cm' | 'mm' | 'in';
 
 export class PageSetup {
@@ -19,6 +20,8 @@ export class PageSetup {
 
   public pageWidth = Unit.fromInch(8.5);
   public pageHeight = Unit.fromInch(11);
+  public pageWidthCustom: number | undefined = undefined;
+  public pageHeightCustom: number | undefined = undefined;
   public topMargin = Unit.fromInch(1);
   public bottomMargin = Unit.fromInch(1);
   public leftMargin = Unit.fromInch(1);
@@ -100,7 +103,11 @@ export class PageSetup {
 
   public hyphenSpacing: number = Unit.fromInch(0.75);
 
+  public martyriaVerticalOffset: number = Unit.fromPt(3);
+
   public chrysanthineAccidentals: boolean | undefined = undefined;
   public noFthoraRestrictions: boolean | undefined = undefined;
   public disableGreekMelismata: boolean | undefined = undefined;
+
+  public useOptionalDiatonicFthoras: boolean | undefined = undefined;
 }

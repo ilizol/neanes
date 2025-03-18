@@ -15,12 +15,11 @@ import { autoUpdater } from 'electron-updater';
 import { promises as fs } from 'fs';
 import i18next from 'i18next';
 import Pseudo from 'i18next-pseudo';
-import sizeOf from 'image-size';
+import { imageSizeFromFile } from 'image-size/fromFile';
 import JSZip from 'jszip';
 import mimetypes from 'mime-types';
 import path from 'path';
 import { debounce } from 'throttle-debounce';
-import { promisify } from 'util';
 
 import { PageSize } from '@/models/PageSetup';
 
@@ -78,8 +77,6 @@ const indexHtml = path.join(process.env.DIST, 'index.html');
 // Read more on https://www.electronjs.org/docs/latest/tutorial/security
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
-const sizeOfAsync = promisify(sizeOf);
-
 const isDevelopment = import.meta.env.DEV;
 
 const userDataPath = app.getPath('userData');
@@ -88,8 +85,8 @@ const maxRecentFiles = 20;
 const storeFilePath = path.join(userDataPath, 'settings.json');
 
 const isMac = process.platform === 'darwin';
-
 const silentPdf = process.argv.includes('--silent-pdf');
+const silentHtml = process.argv.includes('--silent-html');
 const silentLatex = process.argv.includes('--silent-latex');
 const silentLatexIncludeModeKeys = process.argv.includes(
   '--latex-include-mode-keys',
@@ -97,7 +94,7 @@ const silentLatexIncludeModeKeys = process.argv.includes(
 const silentLatexIncludeTextBoxes = process.argv.includes(
   '--latex-include-text-boxes',
 );
-const silent = silentPdf || silentLatex;
+const silent = silentPdf || silentLatex || silentHtml;
 
 const disableUpdates = process.argv.includes('--no-update');
 
@@ -358,6 +355,7 @@ async function openFileFromArgs(argv: string[]) {
   return {
     files: result,
     silentPdf,
+    silentHtml,
     silentLatex,
     silentLatexIncludeModeKeys,
     silentLatexIncludeTextBoxes,
@@ -505,7 +503,7 @@ async function openImage() {
       result.success = true;
 
       try {
-        const dimensions = await sizeOfAsync(filePath);
+        const dimensions = await imageSizeFromFile(filePath);
 
         result.imageHeight = dimensions?.height ?? 0;
         result.imageWidth = dimensions?.width ?? 0;
@@ -532,10 +530,7 @@ async function openImage() {
   return result;
 }
 
-let silentPdfSuccessCount = 0;
-let silentPdfFailCount = 0;
-
-function getPageSize(pageSize: PageSize) {
+function getPageSize(pageSize: PageSize, width: number, height: number) {
   switch (pageSize) {
     case 'Half-Legal':
       return {
@@ -547,10 +542,18 @@ function getPageSize(pageSize: PageSize) {
         width: 5.5,
         height: 8.5,
       };
+    case 'Custom':
+      return {
+        width,
+        height,
+      };
     default:
       return pageSize;
   }
 }
+
+let silentPdfSuccessCount = 0;
+let silentPdfFailCount = 0;
 
 async function exportWorkspaceAsPdf(args: ExportWorkspaceAsPdfArgs) {
   try {
@@ -561,7 +564,11 @@ async function exportWorkspaceAsPdf(args: ExportWorkspaceAsPdfArgs) {
     if (silentPdf) {
       try {
         const data = await win.webContents.printToPDF({
-          pageSize: getPageSize(args.pageSize),
+          pageSize: getPageSize(
+            args.pageSize,
+            args.pageWidthInches,
+            args.pageHeightInches,
+          ),
           landscape: args.landscape,
         });
         let newPath = args.filePath!.replace(/\.byzx?$/, '.pdf');
@@ -609,7 +616,11 @@ async function exportWorkspaceAsPdf(args: ExportWorkspaceAsPdfArgs) {
 
       if (doWrite) {
         const data = await win.webContents.printToPDF({
-          pageSize: getPageSize(args.pageSize),
+          pageSize: getPageSize(
+            args.pageSize,
+            args.pageWidthInches,
+            args.pageHeightInches,
+          ),
           landscape: args.landscape,
         });
         await fs.writeFile(filePath, data);
@@ -632,10 +643,33 @@ async function exportWorkspaceAsPdf(args: ExportWorkspaceAsPdfArgs) {
   }
 }
 
+let silentHtmlSuccessCount = 0;
+let silentHtmlFailCount = 0;
+
 async function exportWorkspaceAsHtml(args: ExportWorkspaceAsHtmlArgs) {
   try {
-    if (saving) {
+    if (saving || !win) {
       return false;
+    }
+
+    if (silentHtml) {
+      try {
+        let newPath = args.filePathFull!.replace(/\.byzx?$/, '.html');
+
+        // Check to make sure we don't accidentally overwrite the original file
+        if (newPath === args.filePathFull) {
+          newPath += '.html';
+        }
+
+        await fs.writeFile(newPath, args.data);
+        silentHtmlSuccessCount++;
+        console.log(`DONE ${args.filePathFull} => ${newPath}`);
+      } catch (error) {
+        silentHtmlFailCount++;
+        console.error(`FAIL ${args.filePathFull} | ${error}`);
+      }
+
+      return;
     }
 
     saving = true;
@@ -924,7 +958,11 @@ async function printWorkspace(args: PrintWorkspaceArgs) {
 
       win.webContents.print(
         {
-          pageSize: getPageSize(args.pageSize),
+          pageSize: getPageSize(
+            args.pageSize,
+            args.pageWidthInches,
+            args.pageHeightInches,
+          ),
           landscape: args.landscape,
         },
         (success, failureReason) => {
@@ -1676,6 +1714,14 @@ ipcMain.handle(IpcRendererChannels.ExitApplication, async () => {
 
     if (silentPdfFailCount > 0) {
       console.log(`Failed to write ${silentPdfFailCount} files`);
+    }
+  }
+
+  if (silentHtml) {
+    console.log(`Successfully wrote ${silentHtmlSuccessCount} files`);
+
+    if (silentHtmlFailCount > 0) {
+      console.log(`Failed to write ${silentHtmlFailCount} files`);
     }
   }
 
