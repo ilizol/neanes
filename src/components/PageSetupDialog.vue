@@ -1084,6 +1084,7 @@ export default class PageSetupDialog extends Vue {
       rootSign: 'DeltaDotted',
       scale: 'Diatonic',
       fthora: 'HardChromaticPa_Top',
+      verticalOffset: 0,
     },
   ];
 
@@ -1474,6 +1475,7 @@ export default class PageSetupDialog extends Vue {
   border-bottom: 1px solid lightgray;
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
+  --zoom: 1;
 }
 
 .preview-elements {

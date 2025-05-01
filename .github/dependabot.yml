@@ -11,10 +11,10 @@ updates:
     labels:
       - 'Type: Dependencies'
     ignore:
-      # Electron 35 crashes on Linux when printing. See:
-      # https://github.com/electron/electron/issues/45931
+      # Electron 36 has save issues on Fedora
+      # https://github.com/neanes/neanes/issues/1408
       - dependency-name: 'electron'
-        versions: ['>=35.0.0']
+        versions: ['>=36.0.0']
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
