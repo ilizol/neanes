@@ -193,6 +193,8 @@ Distance Between Baselines = Lyrics Vertical Offset + Neume Descent + Lyrics Asc
         lyricsMelismaThickness: toPt(pageSetup.lyricsMelismaThickness),
         colors: {
           accidental: pageSetup.accidentalDefaultColor.substring(1),
+          breath: pageSetup.breathDefaultColor.substring(1),
+          cross: pageSetup.crossDefaultColor.substring(1),
           dropCap: pageSetup.dropCapDefaultColor.substring(1),
           fthora: pageSetup.fthoraDefaultColor.substring(1),
           gorgon: pageSetup.gorgonDefaultColor.substring(1),
@@ -318,7 +320,7 @@ Distance Between Baselines = Lyrics Vertical Offset + Neume Descent + Lyrics Asc
               isonOffset: getOffset(
                 note.ison,
                 note.isonOffsetX,
-                note.isonOffsetY,
+                note.computedIsonOffsetY,
               ),
               measureNumber: glyphName(note.measureNumber),
               measureNumberOffset: getOffset(
@@ -636,6 +638,8 @@ interface LatexPageSetup {
   lyricsMelismaThickness: number;
   colors: {
     accidental: string;
+    breath: string;
+    cross: string;
     dropCap: string;
     fthora: string;
     gorgon: string;

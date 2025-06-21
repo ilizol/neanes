@@ -15,7 +15,7 @@
       :neume="VocalExpressionNeume.Vareia"
       :style="vareiaStyle"
     />
-    <Neume :neume="note.quantitativeNeume" />
+    <Neume :neume="note.quantitativeNeume" :style="neumeStyle" />
     <Neume
       v-if="note.stavros"
       :neume="VocalExpressionNeume.Cross_Top"
@@ -104,7 +104,11 @@ import { Component, Prop, Vue } from 'vue-facing-decorator';
 
 import NeumeVue from '@/components/Neume.vue';
 import { NoteElement } from '@/models/Element';
-import { TimeNeume, VocalExpressionNeume } from '@/models/Neumes';
+import {
+  QuantitativeNeume,
+  TimeNeume,
+  VocalExpressionNeume,
+} from '@/models/Neumes';
 import { PageSetup } from '@/models/PageSetup';
 import { withZoom } from '@/utils/withZoom';
 
@@ -419,8 +423,8 @@ export default class NeumeBoxSyllable extends Vue {
           ? `${this.note.isonOffsetX}em`
           : undefined,
       top:
-        this.note.isonOffsetY != null
-          ? `${this.note.isonOffsetY}em`
+        this.note.computedIsonOffsetY != null
+          ? `${this.note.computedIsonOffsetY}em`
           : undefined,
     } as StyleValue;
   }
@@ -436,6 +440,24 @@ export default class NeumeBoxSyllable extends Vue {
           ? `${this.note.timeNeumeOffsetY}em`
           : undefined,
     } as StyleValue;
+  }
+
+  get neumeStyle() {
+    if (this.note.quantitativeNeume == QuantitativeNeume.Cross) {
+      return {
+        color: this.pageSetup.crossDefaultColor,
+        webkitTextStrokeWidth: withZoom(this.pageSetup.crossDefaultStrokeWidth),
+      } as StyleValue;
+    } else if (this.note.quantitativeNeume == QuantitativeNeume.Breath) {
+      return {
+        color: this.pageSetup.breathDefaultColor,
+        webkitTextStrokeWidth: withZoom(
+          this.pageSetup.breathDefaultStrokeWidth,
+        ),
+      } as StyleValue;
+    }
+
+    return {};
   }
 
   get koronisStyle() {
@@ -455,6 +477,8 @@ export default class NeumeBoxSyllable extends Vue {
 
   get stavrosStyle() {
     return {
+      color: this.pageSetup.crossDefaultColor,
+      webkitTextStrokeWidth: withZoom(this.pageSetup.crossDefaultStrokeWidth),
       left:
         this.note.stavrosOffsetX != null
           ? `${this.note.stavrosOffsetX}em`

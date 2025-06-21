@@ -92,6 +92,18 @@ export class PageSetup {
   public richHeaderFooter = false;
   public firstPageNumber = 1;
 
+  public showHeaderHorizontalRule = false;
+  public headerHorizontalRuleMarginTop = 0;
+  public headerHorizontalRuleMarginBottom = 0;
+  public headerHorizontalRuleThickness = Unit.fromPt(1);
+  public headerHorizontalRuleColor = '#000000';
+
+  public showFooterHorizontalRule = false;
+  public footerHorizontalRuleMarginTop = 0;
+  public footerHorizontalRuleMarginBottom = 0;
+  public footerHorizontalRuleThickness = Unit.fromPt(1);
+  public footerHorizontalRuleColor = '#000000';
+
   public lineHeight = Unit.fromInch(0.76);
 
   public melkiteRtl = false;
@@ -106,10 +118,10 @@ export class PageSetup {
   public lyricsMinimumSpacing = Unit.fromInch(0.05);
   public lyricsMelismaCutoffWidth = Unit.fromPt(5);
 
-  // These two melisma properties are currently not exposed in the UI or saved
-  // as part of the byzx format.
+  // These properties are currently not exposed in the UI or saved as part of the byzx format.
   public lyricsMelismaSpacing = Unit.fromInch(0.025);
   public lyricsMelismaThickness = 1;
+  public spaceAfterMartyriaFactor = 0.148;
 
   public get lyricsFont() {
     return `${this.lyricsDefaultFontStyle} normal ${this.lyricsDefaultFontWeight} ${this.lyricsDefaultFontSize}px "${this.lyricsDefaultFontFamily}"`;
@@ -142,6 +154,10 @@ export class PageSetup {
   public noteIndicatorDefaultStrokeWidth = 0;
   public isonDefaultColor = '#ED0000';
   public isonDefaultStrokeWidth = 0;
+  public breathDefaultColor = '#000000';
+  public breathDefaultStrokeWidth = 0;
+  public crossDefaultColor = '#000000';
+  public crossDefaultStrokeWidth = 0;
   public koronisDefaultColor = '#ED0000';
   public koronisDefaultStrokeWidth = 0;
   public martyriaDefaultColor = '#ED0000';
@@ -173,6 +189,7 @@ export class PageSetup {
   public chrysanthineAccidentals: boolean = true;
   public noFthoraRestrictions: boolean = false;
   public disableGreekMelismata: boolean = false;
+  public alignIsonIndicators: boolean = false;
 
   public useOptionalDiatonicFthoras: boolean = false;
 

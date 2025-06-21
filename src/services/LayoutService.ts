@@ -39,6 +39,7 @@ import {
   getNoteValue,
   getScaleNoteFromValue,
   getScaleNoteValue,
+  getShiftWithoutFthora,
   Scale,
   ScaleNote,
 } from '@/models/Scales';
@@ -46,6 +47,7 @@ import { Workspace } from '@/models/Workspace';
 import { NeumeMappingService } from '@/services/NeumeMappingService';
 import { TATWEEL } from '@/utils/constants';
 
+import { fontService } from './FontService';
 import { MelismaHelperGreek, MelismaSyllables } from './MelismaHelperGreek';
 import { TextMeasurementService } from './TextMeasurementService';
 
@@ -118,6 +120,14 @@ export class LayoutService {
     const neumeHeight = TextMeasurementService.getFontHeight(
       `${pageSetup.neumeDefaultFontSize}px ${pageSetup.neumeDefaultFontFamily}`,
     );
+
+    const neumeAscent = TextMeasurementService.getFontBoundingBoxAscent(
+      `${pageSetup.neumeDefaultFontSize}px ${pageSetup.neumeDefaultFontFamily}`,
+    );
+
+    const oligonMidpoint = fontService.getMetrics(
+      pageSetup.neumeDefaultFontFamily,
+    ).oligonMidpoint;
 
     const lyricsVerticalOffset = neumeHeight + pageSetup.lyricsVerticalOffset;
 
@@ -279,7 +289,14 @@ export class LayoutService {
 
         // Currently, headers and footers may only contain a single
         // text box.
-        const headerHeightPx = (header.elements[0] as TextBoxElement).height;
+        let headerHeightPx = (header.elements[0] as TextBoxElement).height;
+
+        if (score.pageSetup.showHeaderHorizontalRule) {
+          headerHeightPx +=
+            score.pageSetup.headerHorizontalRuleMarginBottom +
+            score.pageSetup.headerHorizontalRuleMarginTop +
+            score.pageSetup.headerHorizontalRuleThickness;
+        }
 
         extraHeaderHeightPx = Math.max(
           0,
@@ -292,7 +309,14 @@ export class LayoutService {
 
         // Currently, headers and footers may only contain a single
         // text box.
-        const footerHeightPx = (footer.elements[0] as TextBoxElement).height;
+        let footerHeightPx = (footer.elements[0] as TextBoxElement).height;
+
+        if (score.pageSetup.showFooterHorizontalRule) {
+          footerHeightPx +=
+            score.pageSetup.footerHorizontalRuleMarginBottom +
+            score.pageSetup.footerHorizontalRuleMarginTop +
+            score.pageSetup.footerHorizontalRuleThickness;
+        }
 
         extraFooterHeightPx = Math.max(
           0,
@@ -304,20 +328,84 @@ export class LayoutService {
         pageSetup.innerPageHeight - extraHeaderHeightPx - extraFooterHeightPx;
 
       switch (element.elementType) {
-        case ElementType.TextBox:
+        case ElementType.TextBox: {
+          const nextElement = elements[i + 1];
+          let martyriaWidth = 0;
+
+          if (
+            nextElement?.elementType === ElementType.Martyria &&
+            (nextElement as MartyriaElement).alignRight
+          ) {
+            martyriaWidth = this.getMartyriaWidth(
+              nextElement as MartyriaElement,
+              pageSetup,
+            );
+          }
+
           elementWidthPx = LayoutService.processTextBoxElement(
             element as TextBoxElement,
             pageSetup,
             neumeHeight,
+            currentLineWidthPx,
+            martyriaWidth,
           );
 
           marginTop = (element as TextBoxElement).marginTop;
           break;
-        case ElementType.RichTextBox:
-          elementWidthPx = pageSetup.innerPageWidth;
+        }
+        case ElementType.RichTextBox: {
+          const richTextBoxElement = element as RichTextBoxElement;
 
-          marginTop = (element as TextBoxElement).marginTop;
+          const nextElement = elements[i + 1];
+          let martyriaWidth = 0;
+
+          if (
+            nextElement?.elementType === ElementType.Martyria &&
+            (nextElement as MartyriaElement).alignRight
+          ) {
+            martyriaWidth = this.getMartyriaWidth(
+              nextElement as MartyriaElement,
+              pageSetup,
+            );
+          }
+
+          if (richTextBoxElement.inline) {
+            // TODO Why is the same information being added to each text box element, you might ask?
+            // Because theoretically we should use the values for the previous neume/lyrics
+            // immediately before the inline text box. However, currently it's not possible to mix
+            // and match neume fonts, so it doesn't matter. If it were possible, it would be necessary to put the
+            // information on each text box because it could be different for each box.
+            richTextBoxElement.defaultLyricsFontHeight =
+              this.getLyricsFontHeightFromCache(
+                fontHeightCache,
+                pageSetup.lyricsFont,
+              );
+
+            richTextBoxElement.defaultNeumeFontAscent = neumeAscent;
+
+            richTextBoxElement.oligonMidpoint = oligonMidpoint;
+
+            if (richTextBoxElement.customWidth != null) {
+              elementWidthPx = richTextBoxElement.customWidth;
+            } else {
+              elementWidthPx =
+                pageSetup.innerPageWidth - currentLineWidthPx - martyriaWidth;
+
+              if (elementWidthPx <= 0) {
+                // If there is not enough room for the text box, make it the full page width.
+                // This probably will only happen because of user error and we want to give the user
+                // the change to correct it without making a text box of zero width.
+                elementWidthPx = pageSetup.innerPageWidth;
+              }
+            }
+            richTextBoxElement.height = neumeHeight;
+          } else {
+            elementWidthPx = pageSetup.innerPageWidth;
+          }
+
+          marginTop = richTextBoxElement.marginTop;
           break;
+        }
         case ElementType.ImageBox:
           {
             const imageBox = element as ImageBoxElement;
@@ -363,7 +451,9 @@ export class LayoutService {
         case ElementType.Note: {
           const noteElement = element as NoteElement;
 
-          noteElement.lyricsFontHeight = this.getLyricsFontHeightFromCache(
+          noteElement.computedIsonOffsetY = noteElement.isonOffsetY;
+
+          noteElement.lyricsFontHeight = this.getNoteLyricsFontHeightFromCache(
             fontHeightCache,
             noteElement,
             pageSetup,
@@ -624,7 +714,11 @@ export class LayoutService {
             height += textbox.marginTop;
             height += textbox.marginBottom;
           } else if (
-            line.elements.some((x) => x.elementType === ElementType.RichTextBox)
+            line.elements.some(
+              (x) =>
+                x.elementType === ElementType.RichTextBox &&
+                !(x as RichTextBoxElement).inline,
+            )
           ) {
             const textbox = line.elements.find(
               (x) => x.elementType === ElementType.RichTextBox,
@@ -916,7 +1010,14 @@ export class LayoutService {
         }
       } else {
         // Ensure that there is at least a small width between other elements
-        if (element.x <= currentLyricsEndPx + pageSetup.neumeDefaultSpacing) {
+        if (
+          element.x <= currentLyricsEndPx + pageSetup.neumeDefaultSpacing &&
+          !(
+            element.elementType === ElementType.RichTextBox &&
+            (element as RichTextBoxElement).inline &&
+            (element as RichTextBoxElement).customWidth == null
+          )
+        ) {
           const adjustment =
             currentLyricsEndPx - element.x + pageSetup.neumeDefaultSpacing;
           element.x += adjustment;
@@ -931,7 +1032,6 @@ export class LayoutService {
       }
 
       currentLineWidthPx += elementWidthPx;
-
       // Add extra space between neumes
       if (
         [
@@ -972,6 +1072,10 @@ export class LayoutService {
     this.justifyLines(pages, pageSetup);
 
     this.addMelismas(pages, pageSetup);
+
+    if (pageSetup.alignIsonIndicators) {
+      this.alignIsonIndicators(pages, pageSetup);
+    }
 
     // Record element updates
     elements.forEach((element) => {
@@ -1045,6 +1149,8 @@ export class LayoutService {
     textBoxElement: TextBoxElement,
     pageSetup: PageSetup,
     neumeHeight: number,
+    currentX: number = 0,
+    martyriaWidth: number = 0,
   ) {
     let elementWidthPx = 0;
 
@@ -1077,7 +1183,9 @@ export class LayoutService {
           ? 'italic'
           : 'normal';
 
-      if (textBoxElement.customWidth != null) {
+      if (textBoxElement.fillWidth) {
+        elementWidthPx = pageSetup.innerPageWidth - currentX - martyriaWidth;
+      } else if (textBoxElement.customWidth != null) {
         elementWidthPx = textBoxElement.customWidth;
       } else {
         const lines = textBoxElement.content.split(/(?:\r\n|\r|\n)/g);
@@ -1140,59 +1248,15 @@ export class LayoutService {
         : textBoxElement.lineHeight;
     }
 
-    const fontHeight = TextMeasurementService.getFontHeight(
-      textBoxElement.computedFont,
-    );
-
     if (textBoxElement.inline) {
       textBoxElement.height = neumeHeight;
-    } else if (textBoxElement.multipanel) {
-      const height = Math.max(
-        LayoutService.calculateTextBoxHeight(
-          textBoxElement.contentLeft,
-          fontHeight,
-        ),
-        LayoutService.calculateTextBoxHeight(
-          textBoxElement.contentCenter,
-          fontHeight,
-        ),
-        LayoutService.calculateTextBoxHeight(
-          textBoxElement.contentRight,
-          fontHeight,
-        ),
-      );
-
-      textBoxElement.height = Math.max(height, fontHeight);
     } else if (textBoxElement.customHeight != null) {
       textBoxElement.height = textBoxElement.customHeight;
     } else {
-      let height = 0;
-
-      // First calculate the lines generated by the user entering
-      // new line characters
-      const lines = textBoxElement.content.split(/(?:\r\n|\r|\n)/g);
-
-      for (let i = 0; i < lines.length; i++) {
-        // If the last line is blank, don't include the height
-        if (i === lines.length - 1 && lines[i] === '') {
-          continue;
-        }
-
-        // For each line, it's possible that the line may wrap because it's too long.
-        const lineCount = Math.ceil(
-          TextMeasurementService.getTextWidth(
-            lines[i],
-            textBoxElement.computedFont,
-          ) / elementWidthPx,
-        );
-
-        // We take the max of the lineCount in case the line contains
-        // nothing (i.e. the user entered empty lines to add space between lines)
-        height += Math.max(lineCount, 1) * fontHeight;
-      }
-
-      // Height should be at least the font height
-      textBoxElement.height = Math.max(height, fontHeight);
+      const fontHeight = TextMeasurementService.getFontHeight(
+        textBoxElement.computedFont,
+      );
+      textBoxElement.minHeight = fontHeight;
     }
 
     return elementWidthPx;
@@ -1231,6 +1295,7 @@ export class LayoutService {
       note.tertiaryFthoraPrevious = note.tertiaryFthora;
       note.computedMeasureBarLeftPrevious = note.computedMeasureBarLeft;
       note.computedMeasureBarRightPrevious = note.computedMeasureBarRight;
+      note.computedIsonOffsetYPrevious = note.computedIsonOffsetY;
     } else if (element.elementType === ElementType.TextBox) {
       const textbox = element as TextBoxElement;
       textbox.heightPrevious = textbox.height;
@@ -1280,7 +1345,8 @@ export class LayoutService {
         note.secondaryFthoraPrevious !== note.secondaryFthora ||
         note.tertiaryFthoraPrevious !== note.tertiaryFthora ||
         note.computedMeasureBarLeftPrevious !== note.computedMeasureBarLeft ||
-        note.computedMeasureBarRightPrevious !== note.computedMeasureBarRight;
+        note.computedMeasureBarRightPrevious !== note.computedMeasureBarRight ||
+        note.computedIsonOffsetYPrevious !== note.computedIsonOffsetY;
     }
 
     if (!element.updated && element.elementType === ElementType.TextBox) {
@@ -1288,7 +1354,6 @@ export class LayoutService {
 
       textbox.updated =
         textbox.widthPrevious !== textbox.width ||
-        textbox.heightPrevious !== textbox.height ||
         textbox.computedFontFamilyPrevious !== textbox.computedFontFamily ||
         textbox.computedFontSizePrevious !== textbox.computedFontSize ||
         textbox.computedFontWeightPrevious !== textbox.computedFontWeight ||
@@ -1296,6 +1361,12 @@ export class LayoutService {
         textbox.computedColorPrevious !== textbox.computedColor ||
         textbox.computedStrokeWidthPrevious !== textbox.computedStrokeWidth ||
         textbox.computedLineHeightPrevious !== textbox.computedLineHeight;
+    }
+
+    if (!element.updated && element.elementType === ElementType.RichTextBox) {
+      const textbox = element as RichTextBoxElement;
+
+      textbox.updated = textbox.widthPrevious !== textbox.width;
     }
 
     if (!element.updated && element.elementType === ElementType.ModeKey) {
@@ -1441,7 +1512,9 @@ export class LayoutService {
 
     // Add in padding to give some extra space between
     // the martyria and the next neume
-    const padding = pageSetup.neumeDefaultFontSize * 0.148;
+    const padding = martyriaElement.alignRight
+      ? 0
+      : pageSetup.neumeDefaultFontSize * pageSetup.spaceAfterMartyriaFactor;
 
     martyriaElement.neumeWidth = this.getNeumeWidthFromCache(
       neumeWidthCache,
@@ -1579,7 +1652,8 @@ export class LayoutService {
             (x) =>
               (x.elementType === ElementType.TextBox &&
                 !(x as TextBoxElement).inline) ||
-              x.elementType === ElementType.RichTextBox ||
+              (x.elementType === ElementType.RichTextBox &&
+                !(x as RichTextBoxElement).inline) ||
               x.elementType === ElementType.ModeKey,
           )
         ) {
@@ -1594,6 +1668,21 @@ export class LayoutService {
           (x) =>
             x.lineBreak == true && x.lineBreakType === LineBreakType.Center,
         );
+
+        // If the last element is a martyria, we remove any unnecessary padding
+        // to the right of the martyria, so that it does not affect the justification
+        // of the line. This causes the martyria to be aligned flush to the right side of the page.
+        const lastElementOnLine = line.elements[line.elements.length - 1];
+
+        if (lastElementOnLine.elementType === ElementType.Martyria) {
+          const martyriaElement = lastElementOnLine as MartyriaElement;
+
+          if (!martyriaElement.alignRight) {
+            martyriaElement.width -=
+              pageSetup.neumeDefaultFontSize *
+              pageSetup.spaceAfterMartyriaFactor;
+          }
+        }
 
         const currentWidthPx = line.elements
           .map((x) => x.width)
@@ -1853,10 +1942,6 @@ export class LayoutService {
 
               element.melismaWidth = Math.max(end - start, 0);
 
-              let numberOfHyphensNeeded = Math.floor(
-                element.melismaWidth / pageSetup.hyphenSpacing,
-              );
-
               const widthOfHyphenForThisElement = element.lyricsUseDefaultStyle
                 ? widthOfHyphen
                 : this.getTextWidthFromCache(
@@ -1866,6 +1951,14 @@ export class LayoutService {
                     '-',
                   );
 
+              const hyphenSpacing = Math.max(
+                pageSetup.hyphenSpacing,
+                widthOfHyphenForThisElement,
+              );
+
+              let numberOfHyphensNeeded = Math.floor(
+                element.melismaWidth / hyphenSpacing,
+              );
               // If this is the last note on the page, always show the hyphen
               if (numberOfHyphensNeeded == 0 && nextElement == null) {
                 numberOfHyphensNeeded = 1;
@@ -2252,26 +2345,17 @@ export class LayoutService {
         const modeKey = element as ModeKeyElement;
 
         if (currentModeKey) {
-          currentModeKey.ambitusLowNote =
-            getNoteFromValue(ambitusLow) ?? Note.Pa;
-          currentModeKey.ambitusHighNote =
-            getNoteFromValue(ambitusHigh) ?? Note.Pa;
-          currentModeKey.ambitusLowRootSign =
-            ambitusLow !== Number.MAX_SAFE_INTEGER
-              ? this.getRootSign(
-                  ambitusLowScale,
-                  ambitusLow + ambitusLowShift,
-                  ambitusLow,
-                )
-              : RootSign.Alpha;
-          currentModeKey.ambitusHighRootSign =
-            ambitusHigh !== Number.MIN_SAFE_INTEGER
-              ? this.getRootSign(
-                  ambitusHighScale,
-                  ambitusHigh + ambitusHighShift,
-                  ambitusHigh,
-                )
-              : RootSign.Alpha;
+          if (currentModeKey) {
+            this.assignAmbitus({
+              currentModeKey,
+              ambitusLow,
+              ambitusHigh,
+              ambitusLowScale,
+              ambitusLowShift,
+              ambitusHighScale,
+              ambitusHighShift,
+            });
+          }
         }
 
         ambitusLow = Number.MAX_SAFE_INTEGER;
@@ -2353,6 +2437,41 @@ export class LayoutService {
             }
           }
         }
+      } else if (
+        element.elementType === ElementType.RichTextBox &&
+        (element as RichTextBoxElement).modeChange
+      ) {
+        const modeKey = element as RichTextBoxElement;
+
+        if (currentModeKey) {
+          this.assignAmbitus({
+            currentModeKey,
+            ambitusLow,
+            ambitusHigh,
+            ambitusLowScale,
+            ambitusLowShift,
+            ambitusHighScale,
+            ambitusHighShift,
+          });
+        }
+
+        ambitusLow = Number.MAX_SAFE_INTEGER;
+        ambitusHigh = Number.MIN_SAFE_INTEGER;
+
+        currentModeKey = null;
+        currentNote = getScaleNoteValue(modeKey.modeChangePhysicalNote);
+        currentScale = modeKey.modeChangeScale;
+        currentShift = 0;
+
+        if (modeKey.modeChangeVirtualNote) {
+          currentNoteVirtual = getScaleNoteValue(modeKey.modeChangeVirtualNote);
+
+          currentShift = getShiftWithoutFthora(
+            currentNote,
+            currentNoteVirtual,
+            currentScale,
+          );
+        }
       }
     }
 
@@ -2375,6 +2494,83 @@ export class LayoutService {
               ambitusHigh,
             )
           : RootSign.Alpha;
+    }
+  }
+
+  public static assignAmbitus({
+    currentModeKey,
+    ambitusLow,
+    ambitusHigh,
+    ambitusLowScale,
+    ambitusLowShift,
+    ambitusHighScale,
+    ambitusHighShift,
+  }: {
+    currentModeKey: ModeKeyElement;
+    ambitusLow: number;
+    ambitusHigh: number;
+    ambitusLowScale: Scale;
+    ambitusLowShift: number;
+    ambitusHighScale: Scale;
+    ambitusHighShift: number;
+  }) {
+    currentModeKey.ambitusLowNote = getNoteFromValue(ambitusLow) ?? Note.Pa;
+    currentModeKey.ambitusHighNote = getNoteFromValue(ambitusHigh) ?? Note.Pa;
+    currentModeKey.ambitusLowRootSign =
+      ambitusLow !== Number.MAX_SAFE_INTEGER
+        ? this.getRootSign(
+            ambitusLowScale,
+            ambitusLow + ambitusLowShift,
+            ambitusLow,
+          )
+        : RootSign.Alpha;
+    currentModeKey.ambitusHighRootSign =
+      ambitusHigh !== Number.MIN_SAFE_INTEGER
+        ? this.getRootSign(
+            ambitusHighScale,
+            ambitusHigh + ambitusHighShift,
+            ambitusHigh,
+          )
+        : RootSign.Alpha;
+  }
+
+  public static alignIsonIndicators(pages: Page[], pageSetup: PageSetup) {
+    for (const page of pages) {
+      for (const line of page.lines) {
+        const notes = line.elements.filter(
+          (x) => x.elementType === ElementType.Note,
+        ) as NoteElement[];
+        const notesWithIson = notes.filter((x) => x.ison != null);
+
+        // The minOffset represents the highest position in this coordinate system.
+        // 0 is the default position, positive moves down, negative moves up.
+        let minOffset = Number.MAX_VALUE;
+
+        for (const note of notesWithIson) {
+          const base = NeumeMappingService.getMapping(note.quantitativeNeume);
+          const mark = NeumeMappingService.getMapping(note.ison!);
+          const offset = fontService.getMarkAnchorOffset(
+            pageSetup.neumeDefaultFontFamily,
+            base.glyphName,
+            mark.glyphName,
+          );
+
+          const totalOffset = offset.y + (note.isonOffsetY ?? 0);
+
+          if (totalOffset < minOffset) {
+            minOffset = totalOffset;
+          }
+
+          note.isonOffsetYBeforeAdjustment = totalOffset;
+        }
+
+        for (const note of notesWithIson) {
+          note.computedIsonOffsetY =
+            minOffset -
+            note.isonOffsetYBeforeAdjustment +
+            (note.isonOffsetY ?? 0);
+        }
+      }
     }
   }
 
@@ -2697,7 +2893,7 @@ export class LayoutService {
     return descent;
   }
 
-  private static getLyricsFontHeightFromCache(
+  private static getNoteLyricsFontHeightFromCache(
     cache: Map<string, number>,
     element: NoteElement,
     pageSetup: PageSetup,
@@ -2706,6 +2902,13 @@ export class LayoutService {
       ? pageSetup.lyricsFont
       : element.lyricsFont;
 
+    return this.getLyricsFontHeightFromCache(cache, font);
+  }
+
+  private static getLyricsFontHeightFromCache(
+    cache: Map<string, number>,
+    font: string,
+  ) {
     const key = font;
 
     let height = cache.get(key);

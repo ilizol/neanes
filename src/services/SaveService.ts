@@ -227,6 +227,24 @@ export class SaveService {
     pageSetup.showFooter = p.showFooter || undefined;
     pageSetup.richHeaderFooter = p.richHeaderFooter || undefined;
 
+    if (p.showHeaderHorizontalRule) {
+      pageSetup.showHeaderHorizontalRule = p.showHeaderHorizontalRule;
+      pageSetup.headerHorizontalRuleMarginTop = p.headerHorizontalRuleMarginTop;
+      pageSetup.headerHorizontalRuleMarginBottom =
+        p.headerHorizontalRuleMarginBottom;
+      pageSetup.headerHorizontalRuleThickness = p.headerHorizontalRuleThickness;
+      pageSetup.headerHorizontalRuleColor = p.headerHorizontalRuleColor;
+    }
+
+    if (p.showFooterHorizontalRule) {
+      pageSetup.showFooterHorizontalRule = p.showFooterHorizontalRule;
+      pageSetup.footerHorizontalRuleMarginTop = p.footerHorizontalRuleMarginTop;
+      pageSetup.footerHorizontalRuleMarginBottom =
+        p.footerHorizontalRuleMarginBottom;
+      pageSetup.footerHorizontalRuleThickness = p.footerHorizontalRuleThickness;
+      pageSetup.footerHorizontalRuleColor = p.footerHorizontalRuleColor;
+    }
+
     pageSetup.firstPageNumber = p.firstPageNumber;
 
     pageSetup.accidentalDefaultColor = p.accidentalDefaultColor;
@@ -247,6 +265,10 @@ export class SaveService {
       p.noteIndicatorDefaultStrokeWidth;
     pageSetup.isonDefaultColor = p.isonDefaultColor;
     pageSetup.isonDefaultStrokeWidth = p.isonDefaultStrokeWidth;
+    pageSetup.breathDefaultColor = p.breathDefaultColor;
+    pageSetup.breathDefaultStrokeWidth = p.breathDefaultStrokeWidth;
+    pageSetup.crossDefaultColor = p.crossDefaultColor;
+    pageSetup.crossDefaultStrokeWidth = p.crossDefaultStrokeWidth;
     pageSetup.koronisDefaultColor = p.koronisDefaultColor;
     pageSetup.koronisDefaultStrokeWidth = p.koronisDefaultStrokeWidth;
 
@@ -260,6 +282,7 @@ export class SaveService {
     pageSetup.chrysanthineAccidentals = p.chrysanthineAccidentals;
     pageSetup.noFthoraRestrictions = p.noFthoraRestrictions || undefined;
     pageSetup.disableGreekMelismata = p.disableGreekMelismata || undefined;
+    pageSetup.alignIsonIndicators = p.alignIsonIndicators || undefined;
     pageSetup.useOptionalDiatonicFthoras =
       p.useOptionalDiatonicFthoras || undefined;
   }
@@ -525,16 +548,22 @@ export class SaveService {
       element.contentRight = e.contentRight;
       element.multipanel = true;
     }
+
+    if (e.inline) {
+      element.inline = e.inline;
+      element.contentBottom = e.contentBottom;
+    }
+
     element.fontFamily = e.fontFamily;
     element.fontSize = e.fontSize;
     element.strokeWidth = e.strokeWidth;
-    element.inline = e.inline || undefined;
     element.bold = e.bold || undefined;
     element.italic = e.italic || undefined;
     element.underline = e.underline || undefined;
     element.lineHeight = e.lineHeight ?? undefined;
     element.height = e.height;
     element.customWidth = e.customWidth ?? undefined;
+    element.fillWidth = e.fillWidth || undefined;
     element.customHeight = e.customHeight ?? undefined;
     element.marginTop = e.marginTop ?? undefined;
     element.marginBottom = e.marginBottom ?? undefined;
@@ -554,7 +583,28 @@ export class SaveService {
       element.multipanel = true;
     }
 
+    if (e.inline) {
+      element.inline = e.inline;
+      element.contentBottom = e.contentBottom;
+      element.centerOnPage = e.centerOnPage;
+      element.offsetYBottom = e.offsetYBottom || undefined;
+      element.offsetYTop = e.offsetYTop || undefined;
+    }
+
+    if (e.modeChange) {
+      element.modeChange = e.modeChange;
+      element.modeChangePhysicalNote = e.modeChangePhysicalNote;
+      element.modeChangeScale = e.modeChangeScale;
+      element.modeChangeVirtualNote = e.modeChangeVirtualNote ?? undefined;
+      element.modeChangeBpm = e.modeChangeBpm;
+      element.modeChangeIgnoreAttractions =
+        e.modeChangeIgnoreAttractions ?? undefined;
+      element.modeChangePermanentEnharmonicZo =
+        e.modeChangePermanentEnharmonicZo ?? undefined;
+    }
+
     element.height = e.height;
+    element.customWidth = e.customWidth ?? undefined;
     element.marginTop = e.marginTop ?? undefined;
     element.marginBottom = e.marginBottom ?? undefined;
     element.rtl = e.rtl || undefined;
@@ -774,6 +824,36 @@ export class SaveService {
     pageSetup.richHeaderFooter = p.richHeaderFooter === true;
     pageSetup.firstPageNumber = p.firstPageNumber ?? pageSetup.firstPageNumber;
 
+    if (p.showHeaderHorizontalRule === true) {
+      pageSetup.showHeaderHorizontalRule = p.showHeaderHorizontalRule;
+      pageSetup.headerHorizontalRuleMarginTop =
+        p.headerHorizontalRuleMarginTop ??
+        pageSetup.headerHorizontalRuleMarginTop;
+      pageSetup.headerHorizontalRuleMarginBottom =
+        p.headerHorizontalRuleMarginBottom ??
+        pageSetup.headerHorizontalRuleMarginBottom;
+      pageSetup.headerHorizontalRuleThickness =
+        p.headerHorizontalRuleThickness ??
+        pageSetup.headerHorizontalRuleThickness;
+      pageSetup.headerHorizontalRuleColor =
+        p.headerHorizontalRuleColor ?? pageSetup.headerHorizontalRuleColor;
+    }
+
+    if (p.showFooterHorizontalRule === true) {
+      pageSetup.showFooterHorizontalRule = p.showFooterHorizontalRule;
+      pageSetup.footerHorizontalRuleMarginTop =
+        p.footerHorizontalRuleMarginTop ??
+        pageSetup.footerHorizontalRuleMarginTop;
+      pageSetup.footerHorizontalRuleMarginBottom =
+        p.footerHorizontalRuleMarginBottom ??
+        pageSetup.footerHorizontalRuleMarginBottom;
+      pageSetup.footerHorizontalRuleThickness =
+        p.footerHorizontalRuleThickness ??
+        pageSetup.footerHorizontalRuleThickness;
+      pageSetup.footerHorizontalRuleColor =
+        p.footerHorizontalRuleColor ?? pageSetup.footerHorizontalRuleColor;
+    }
+
     pageSetup.lineHeight = p.lineHeight;
 
     pageSetup.dropCapDefaultColor =
@@ -884,6 +964,14 @@ export class SaveService {
       p.isonDefaultColor ?? pageSetup.isonDefaultColor;
     pageSetup.isonDefaultStrokeWidth =
       p.isonDefaultStrokeWidth ?? pageSetup.isonDefaultStrokeWidth;
+    pageSetup.breathDefaultColor =
+      p.breathDefaultColor ?? pageSetup.breathDefaultColor;
+    pageSetup.breathDefaultStrokeWidth =
+      p.breathDefaultStrokeWidth ?? pageSetup.breathDefaultStrokeWidth;
+    pageSetup.crossDefaultColor =
+      p.crossDefaultColor ?? pageSetup.crossDefaultColor;
+    pageSetup.crossDefaultStrokeWidth =
+      p.crossDefaultStrokeWidth ?? pageSetup.crossDefaultStrokeWidth;
     pageSetup.koronisDefaultColor =
       p.koronisDefaultColor ?? pageSetup.koronisDefaultColor;
     pageSetup.koronisDefaultStrokeWidth =
@@ -901,6 +989,7 @@ export class SaveService {
       p.chrysanthineAccidentals === undefined;
     pageSetup.noFthoraRestrictions = p.noFthoraRestrictions === true;
     pageSetup.disableGreekMelismata = p.disableGreekMelismata === true;
+    pageSetup.alignIsonIndicators = p.alignIsonIndicators === true;
     pageSetup.useOptionalDiatonicFthoras =
       p.useOptionalDiatonicFthoras === true;
 
@@ -1253,6 +1342,10 @@ export class SaveService {
       element.contentRight = e.contentRight;
     }
 
+    if (e.inline) {
+      element.contentBottom = e.contentBottom;
+    }
+
     element.multipanel = e.multipanel === true;
 
     element.fontFamily = e.fontFamily;
@@ -1265,6 +1358,7 @@ export class SaveService {
     element.strokeWidth = e.strokeWidth ?? element.strokeWidth;
     element.lineHeight = e.lineHeight ?? pageSetup.textBoxDefaultLineHeight;
     element.customWidth = e.customWidth ?? null;
+    element.fillWidth = e.fillWidth === true;
     element.customHeight = e.customHeight ?? null;
     element.marginTop = e.marginTop ?? 0;
     element.marginBottom = e.marginBottom ?? 0;
@@ -1293,6 +1387,28 @@ export class SaveService {
       element.contentRight = e.contentRight;
     }
 
+    if (e.inline) {
+      element.contentBottom = e.contentBottom;
+      element.centerOnPage = e.centerOnPage === true;
+      element.offsetYBottom = e.offsetYBottom ?? 0;
+      element.offsetYTop = e.offsetYTop ?? 0;
+    }
+
+    if (e.modeChange) {
+      element.modeChangePhysicalNote = e.modeChangePhysicalNote;
+      element.modeChangeScale = e.modeChangeScale;
+      element.modeChangeVirtualNote = e.modeChangeVirtualNote ?? null;
+      element.modeChangeBpm = e.modeChangeBpm;
+      element.modeChangeIgnoreAttractions =
+        e.modeChangeIgnoreAttractions === true;
+      element.modeChangePermanentEnharmonicZo =
+        e.modeChangePermanentEnharmonicZo === true;
+    }
+
+    element.customWidth = e.customWidth ?? null;
+
+    element.modeChange = e.modeChange === true;
+    element.inline = e.inline === true;
     element.multipanel = e.multipanel === true;
     element.rtl = e.rtl === true;
   }

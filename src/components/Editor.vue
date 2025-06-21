@@ -98,7 +98,7 @@
                 >
                   <TextBoxRich
                     class="element-box"
-                    :key="`element-${getHeaderForPageIndex(pageIndex).id}-${
+                    :key="`element-${this.selectedWorkspaceId}-${getHeaderForPageIndex(pageIndex).id}-${
                       getHeaderForPageIndex(pageIndex).keyHelper
                     }`"
                     :ref="`header-${pageIndex}`"
@@ -111,13 +111,10 @@
                     :metadata="getTokenMetadata(pageIndex)"
                     :pageSetup="score.pageSetup"
                     :fonts="fonts"
-                    :class="[
-                      {
-                        selectedTextbox:
-                          getHeaderForPageIndex(pageIndex) ==
-                          selectedHeaderFooterElement,
-                      },
-                    ]"
+                    :selected="
+                      getHeaderForPageIndex(pageIndex) ==
+                      selectedHeaderFooterElement
+                    "
                     :style="headerStyle"
                     @click="
                       selectedHeaderFooterElement =
@@ -142,7 +139,7 @@
                 >
                   <TextBox
                     class="element-box"
-                    :key="`element-${getHeaderForPageIndex(pageIndex).id}-${
+                    :key="`element-${this.selectedWorkspaceId}-${getHeaderForPageIndex(pageIndex).id}-${
                       getHeaderForPageIndex(pageIndex).keyHelper
                     }`"
                     :ref="`header-${pageIndex}`"
@@ -166,32 +163,23 @@
                       selectedHeaderFooterElement =
                         getHeaderForPageIndex(pageIndex)
                     "
-                    @update:content="
-                      updateTextBoxContent(
-                        getHeaderForPageIndex(pageIndex)! as TextBoxElement,
-                        $event,
-                      )
-                    "
-                    @update:contentLeft="
-                      updateTextBoxContentLeft(
-                        getHeaderForPageIndex(pageIndex)! as TextBoxElement,
-                        $event,
-                      )
-                    "
-                    @update:contentCenter="
-                      updateTextBoxContentCenter(
-                        getHeaderForPageIndex(pageIndex)! as TextBoxElement,
-                        $event,
-                      )
-                    "
-                    @update:contentRight="
-                      updateTextBoxContentRight(
+                    @update="
+                      updateTextBox(
                         getHeaderForPageIndex(pageIndex)! as TextBoxElement,
                         $event,
                       )
                     "
                   />
                 </template>
+                <div
+                  v-if="score.pageSetup.showHeaderHorizontalRule"
+                  class="header-footer-hr"
+                  :style="
+                    getHeaderHorizontalRuleStyle(
+                      getHeaderForPageIndex(pageIndex).height,
+                    )
+                  "
+                ></div>
               </template>
               <div
                 class="line"
@@ -202,7 +190,7 @@
                 <div
                   v-for="element in line.elements"
                   :id="`element-${element.id}`"
-                  :key="`element-${element.id}-${element.keyHelper}`"
+                  :key="`element-${this.selectedWorkspaceId}-${element.id}-${element.keyHelper}`"
                   class="element-box"
                   :style="getElementStyle(element)"
                 >
@@ -468,28 +456,11 @@
                       :editMode="true"
                       :metadata="getTokenMetadata(pageIndex)"
                       :pageSetup="score.pageSetup"
-                      :class="[{ selectedTextbox: isSelected(element) }]"
+                      :selected="isSelected(element)"
                       @select-single="selectedElement = element"
-                      @update:content="
-                        updateTextBoxContent(element as TextBoxElement, $event)
-                      "
-                      @update:contentLeft="
-                        updateTextBoxContentLeft(
-                          element as TextBoxElement,
-                          $event,
-                        )
-                      "
-                      @update:contentCenter="
-                        updateTextBoxContentCenter(
-                          element as TextBoxElement,
-                          $event,
-                        )
-                      "
-                      @update:contentRight="
-                        updateTextBoxContentRight(
-                          element as TextBoxElement,
-                          $event,
-                        )
+                      @update="updateTextBox(element as TextBoxElement, $event)"
+                      @update:height="
+                        updateTextBoxHeight(element as TextBoxElement, $event)
                       "
                     />
                   </template>
@@ -512,7 +483,7 @@
                       :element="element"
                       :pageSetup="score.pageSetup"
                       :fonts="fonts"
-                      :class="[{ selectedTextbox: isSelected(element) }]"
+                      :selected="isSelected(element)"
                       @select-single="selectedElement = element"
                       @update="
                         updateRichTextBox(element as RichTextBoxElement, $event)
@@ -608,12 +579,21 @@
                 </div>
               </div>
               <template v-if="score.pageSetup.showFooter">
+                <div
+                  v-if="score.pageSetup.showFooterHorizontalRule"
+                  class="header-footer-hr"
+                  :style="
+                    getFooterHorizontalRuleStyle(
+                      getFooterForPageIndex(pageIndex).height,
+                    )
+                  "
+                ></div>
                 <template
                   v-if="isRichTextBoxElement(getFooterForPageIndex(pageIndex))"
                 >
                   <TextBoxRich
                     class="element-box"
-                    :key="`element-${getFooterForPageIndex(pageIndex).id}-${
+                    :key="`element-${this.selectedWorkspaceId}-${getFooterForPageIndex(pageIndex).id}-${
                       getFooterForPageIndex(pageIndex).keyHelper
                     }`"
                     :ref="`footer-${pageIndex}`"
@@ -626,13 +606,10 @@
                     :metadata="getTokenMetadata(pageIndex)"
                     :pageSetup="score.pageSetup"
                     :fonts="fonts"
-                    :class="[
-                      {
-                        selectedTextbox:
-                          getFooterForPageIndex(pageIndex) ==
-                          selectedHeaderFooterElement,
-                      },
-                    ]"
+                    :selected="
+                      getFooterForPageIndex(pageIndex) ==
+                      selectedHeaderFooterElement
+                    "
                     :style="footerStyle"
                     @click="
                       selectedHeaderFooterElement =
@@ -658,7 +635,7 @@
                   <TextBox
                     class="element-box"
                     :ref="`footer-${pageIndex}`"
-                    :key="`element-${getFooterForPageIndex(pageIndex).id}-${
+                    :key="`element-${this.selectedWorkspaceId}-${getFooterForPageIndex(pageIndex).id}-${
                       getFooterForPageIndex(pageIndex).keyHelper
                     }`"
                     :element="getFooterForPageIndex(pageIndex)"
@@ -681,26 +658,8 @@
                       selectedHeaderFooterElement =
                         getFooterForPageIndex(pageIndex)
                     "
-                    @update:content="
-                      updateTextBoxContent(
-                        getFooterForPageIndex(pageIndex)! as TextBoxElement,
-                        $event,
-                      )
-                    "
-                    @update:contentLeft="
-                      updateTextBoxContentLeft(
-                        getFooterForPageIndex(pageIndex)! as TextBoxElement,
-                        $event,
-                      )
-                    "
-                    @update:contentCenter="
-                      updateTextBoxContentCenter(
-                        getFooterForPageIndex(pageIndex)! as TextBoxElement,
-                        $event,
-                      )
-                    "
-                    @update:contentRight="
-                      updateTextBoxContentRight(
+                    @update="
+                      updateTextBox(
                         getFooterForPageIndex(pageIndex)! as TextBoxElement,
                         $event,
                       )
@@ -744,8 +703,11 @@
           updateTextBoxLineHeight(selectedTextBoxElement, $event)
         "
         @update:customWidth="updateTextBoxWidth(selectedTextBoxElement, $event)"
+        @update:fillWidth="
+          updateTextBoxFillWidth(selectedTextBoxElement, $event)
+        "
         @update:customHeight="
-          updateTextBoxHeight(selectedTextBoxElement, $event)
+          updateTextBoxCustomHeight(selectedTextBoxElement, $event)
         "
         @update:marginTop="
           updateTextBoxMarginTop(selectedTextBoxElement, $event)
@@ -767,8 +729,60 @@
       <ToolbarTextBoxRich
         :element="selectedRichTextBoxElement"
         :pageSetup="score.pageSetup"
+        @update:inline="
+          updateRichTextBox(selectedRichTextBoxElement, { inline: $event })
+        "
+        @update:customWidth="
+          updateRichTextBox(selectedRichTextBoxElement, { customWidth: $event })
+        "
+        @update:offsetYTop="
+          updateRichTextBox(selectedRichTextBoxElement, { offsetYTop: $event })
+        "
+        @update:offsetYBottom="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            offsetYBottom: $event,
+          })
+        "
         @update:rtl="
           updateRichTextBox(selectedRichTextBoxElement, { rtl: $event })
+        "
+        @update:centerOnPage="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            centerOnPage: $event,
+          })
+        "
+        @update:modeChange="
+          updateRichTextBox(selectedRichTextBoxElement, { modeChange: $event })
+        "
+        @update:modeChangePhysicalNote="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            modeChangePhysicalNote: $event,
+          })
+        "
+        @update:modeChangeScale="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            modeChangeScale: $event,
+          })
+        "
+        @update:modeChangeVirtualNote="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            modeChangeVirtualNote: $event,
+          })
+        "
+        @update:modeChangeIgnoreAttractions="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            modeChangeIgnoreAttractions: $event,
+          })
+        "
+        @update:modeChangePermanentEnharmonicZo="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            modeChangePermanentEnharmonicZo: $event,
+          })
+        "
+        @update:modeChangeBpm="
+          updateRichTextBox(selectedRichTextBoxElement, {
+            modeChangeBpm: $event,
+          })
         "
         @update:marginTop="
           updateRichTextBoxMarginTop(selectedRichTextBoxElement, $event)
@@ -969,7 +983,7 @@
         :element="selectedElement"
         :pageSetup="score.pageSetup"
         :neumeKeyboard="neumeKeyboard"
-        :key="`toolbar-neume-${selectedElement.id}-${selectedElement.keyHelper}`"
+        :key="`toolbar-neume-${this.selectedWorkspaceId}-${selectedElement.id}-${selectedElement.keyHelper}`"
         :innerNeume="toolbarInnerNeume"
         @update:innerNeume="toolbarInnerNeume = $event"
         @update:accidental="
@@ -1192,14 +1206,26 @@
     <template v-if="richTextBoxCalculation">
       <TextBoxRich
         class="richTextBoxCalculation"
-        v-for="element in richTextBoxElements"
+        v-for="element in resizableRichTextBoxElements"
         :key="element.id"
         :element="element"
         :pageSetup="score.pageSetup"
         :fonts="fonts"
+        :recalc="true"
         @update:height="
           updateRichTextBoxHeight(element as RichTextBoxElement, $event)
         "
+      />
+    </template>
+    <template v-if="textBoxCalculation">
+      <TextBox
+        class="textBoxCalculation"
+        v-for="element in resizableTextBoxElements"
+        :key="element.id"
+        :element="element"
+        :pageSetup="score.pageSetup"
+        :fonts="fonts"
+        @update:height="updateTextBoxHeight(element as TextBoxElement, $event)"
       />
     </template>
   </div>
@@ -1334,6 +1360,7 @@ import { LyricService } from '@/services/LyricService';
 import { NeumeKeyboard } from '@/services/NeumeKeyboard';
 import { IPlatformService } from '@/services/platform/IPlatformService';
 import { SaveService } from '@/services/SaveService';
+import { TextMeasurementService } from '@/services/TextMeasurementService';
 import { TextSearchService } from '@/services/TextSearchService';
 import { GORTHMIKON, PELASTIKON, TATWEEL } from '@/utils/constants';
 import { getCursorPosition } from '@/utils/getCursorPosition';
@@ -1445,9 +1472,13 @@ export default class Editor extends Vue {
   exportFormat: ExportFormat = ExportFormat.PNG;
 
   clipboard: ScoreElement[] = [];
+  formatType: ElementType | null = null;
   textBoxFormat: Partial<TextBoxElement> | null = null;
+  noteFormat: Partial<NoteElement> | null = null;
   richTextBoxCalculation = false;
   richTextBoxCalculationCount = 0;
+  textBoxCalculation = false;
+  textBoxCalculationCount = 0;
 
   fonts: string[] = [];
 
@@ -1736,9 +1767,18 @@ export default class Editor extends Vue {
     return this.score?.staff.elements ?? [];
   }
 
-  get richTextBoxElements() {
+  get resizableRichTextBoxElements() {
     return this.elements.filter(
-      (x) => x.elementType === ElementType.RichTextBox,
+      (x) =>
+        x.elementType === ElementType.RichTextBox &&
+        !(x as RichTextBoxElement).inline,
+    );
+  }
+
+  get resizableTextBoxElements() {
+    return this.elements.filter(
+      (x) =>
+        x.elementType === ElementType.TextBox && !(x as TextBoxElement).inline,
     );
   }
 
@@ -1950,10 +1990,42 @@ export default class Editor extends Vue {
     } as StyleValue;
   }
 
+  getHeaderHorizontalRuleStyle(headerHeight: number) {
+    return {
+      left: withZoom(this.score.pageSetup.leftMargin),
+      top: withZoom(
+        this.score.pageSetup.headerMargin +
+          headerHeight +
+          this.score.pageSetup.headerHorizontalRuleMarginTop,
+      ),
+      color: this.score.pageSetup.headerHorizontalRuleColor,
+      borderTopWidth: withZoom(
+        this.score.pageSetup.headerHorizontalRuleThickness,
+      ),
+      width: withZoom(this.score.pageSetup.innerPageWidth),
+    } as StyleValue;
+  }
+
   get footerStyle() {
     return {
       left: withZoom(this.score.pageSetup.leftMargin),
       bottom: withZoom(this.score.pageSetup.footerMargin),
+    } as StyleValue;
+  }
+
+  getFooterHorizontalRuleStyle(footerHeight: number) {
+    return {
+      left: withZoom(this.score.pageSetup.leftMargin),
+      bottom: withZoom(
+        this.score.pageSetup.footerMargin +
+          footerHeight +
+          this.score.pageSetup.footerHorizontalRuleMarginBottom,
+      ),
+      color: this.score.pageSetup.footerHorizontalRuleColor,
+      borderTopWidth: withZoom(
+        this.score.pageSetup.footerHorizontalRuleThickness,
+      ),
+      width: withZoom(this.score.pageSetup.innerPageWidth),
     } as StyleValue;
   }
 
@@ -2016,6 +2088,11 @@ export default class Editor extends Vue {
 
   @Watch('currentFilePath')
   onFilePathUpdated() {
+    window.document.title = this.windowTitle;
+  }
+
+  @Watch('selectedWorkspaceId')
+  onCurrentWorkspaceIdUpdated() {
     window.document.title = this.windowTitle;
   }
 
@@ -2131,8 +2208,9 @@ export default class Editor extends Vue {
     return `Untitled-${this.untitledIndex++}`;
   }
 
-  getFileName(workspace: Workspace) {
-    const unsavedChangesMarker = workspace.hasUnsavedChanges ? '*' : '';
+  getFileName(workspace: Workspace, showUnsavedChanges: boolean = true) {
+    const unsavedChangesMarker =
+      workspace.hasUnsavedChanges && showUnsavedChanges ? '*' : '';
 
     if (workspace.filePath != null) {
       const fileName = getFileNameFromPath(workspace.filePath);
@@ -2465,6 +2543,20 @@ export default class Editor extends Vue {
     } else if (this.selectionRange != null) {
       this.selectionRange.end = elementIndex;
     }
+  }
+
+  getNormalizedSelectionRange() {
+    if (this.selectionRange == null) {
+      return null;
+    }
+
+    const start = Math.min(this.selectionRange.start, this.selectionRange.end);
+    const end = Math.max(this.selectionRange.start, this.selectionRange.end);
+
+    return {
+      start,
+      end,
+    } as ScoreElementSelectionRange;
   }
 
   isSelected(element: ScoreElement) {
@@ -3671,7 +3763,8 @@ export default class Editor extends Vue {
           handled = true;
         } else if (
           this.rtl &&
-          getCursorPosition() === htmlElement.textElement.getInnerText().length
+          getCursorPosition() ===
+            htmlElement.getTextElement().getInnerText().length
         ) {
           this.moveRightThrottled();
           handled = true;
@@ -3680,7 +3773,8 @@ export default class Editor extends Vue {
       case 'ArrowRight':
         if (
           !this.rtl &&
-          getCursorPosition() === htmlElement.textElement.getInnerText().length
+          getCursorPosition() ===
+            htmlElement.getTextElement().getInnerText().length
         ) {
           this.moveRightThrottled();
           handled = true;
@@ -3716,7 +3810,7 @@ export default class Editor extends Vue {
         handled = true;
         break;
       case 'KeyV':
-        document.execCommand('paste');
+        this.ipcService.paste();
         handled = true;
         break;
       case 'KeyX':
@@ -5351,12 +5445,24 @@ export default class Editor extends Vue {
       element.keyHelper++;
     }
 
+    const heightProp: keyof RichTextBoxElement = 'height';
+
+    const noHistory =
+      Object.keys(newValues).length === 1 && heightProp in newValues;
+
     this.commandService.execute(
       this.richTextBoxCommandFactory.create('update-properties', {
         target: element,
         newValues: newValues,
       }),
+      noHistory,
     );
+
+    const modeChangeProp: keyof RichTextBoxElement = 'modeChange';
+
+    if (modeChangeProp in newValues) {
+      this.refreshStaffLyrics();
+    }
 
     this.save();
   }
@@ -5381,30 +5487,26 @@ export default class Editor extends Vue {
   }
 
   updateTextBox(element: TextBoxElement, newValues: Partial<TextBoxElement>) {
+    const noHistory =
+      Object.keys(newValues).length === 1 && 'height' in newValues;
+
     this.commandService.execute(
       this.textBoxCommandFactory.create('update-properties', {
         target: element,
         newValues: newValues,
       }),
+      noHistory,
     );
 
     this.save();
   }
 
-  updateTextBoxContent(element: TextBoxElement, content: string) {
-    this.updateTextBox(element, { content });
-  }
-
-  updateTextBoxContentLeft(element: TextBoxElement, contentLeft: string) {
-    this.updateTextBox(element, { contentLeft });
-  }
-
-  updateTextBoxContentCenter(element: TextBoxElement, contentCenter: string) {
-    this.updateTextBox(element, { contentCenter });
-  }
-
-  updateTextBoxContentRight(element: TextBoxElement, contentRight: string) {
-    this.updateTextBox(element, { contentRight });
+  updateTextBoxHeight(element: TextBoxElement, height: number) {
+    // The height could be updated by many rich text box elements at once
+    // (e.g. if PageSetup changes) so we debounce the save.
+    element.height = height;
+    this.textBoxCalculationCount++;
+    this.saveDebounced();
   }
 
   updateTextBoxUseDefaultStyle(
@@ -5462,7 +5564,14 @@ export default class Editor extends Vue {
     this.updateTextBox(element, { customWidth });
   }
 
-  updateTextBoxHeight(element: TextBoxElement, customHeight: number | null) {
+  updateTextBoxFillWidth(element: TextBoxElement, fillWidth: boolean) {
+    this.updateTextBox(element, { fillWidth });
+  }
+
+  updateTextBoxCustomHeight(
+    element: TextBoxElement,
+    customHeight: number | null,
+  ) {
     this.updateTextBox(element, { customHeight });
   }
 
@@ -6148,6 +6257,7 @@ export default class Editor extends Vue {
 
     if (needToRecalcRichTextBoxes) {
       this.recalculateRichTextBoxHeights();
+      this.recalculateTextBoxHeights();
     }
 
     this.save();
@@ -6367,7 +6477,7 @@ export default class Editor extends Vue {
     }
 
     nextTick(async () => {
-      const expectedCount = this.richTextBoxElements.length;
+      const expectedCount = this.resizableRichTextBoxElements.length;
       this.richTextBoxCalculationCount = 0;
       this.richTextBoxCalculation = true;
 
@@ -6393,6 +6503,42 @@ export default class Editor extends Vue {
       await new Promise(poll);
 
       this.richTextBoxCalculation = false;
+      this.saveDebounced();
+    });
+  }
+
+  recalculateTextBoxHeights() {
+    if (this.textBoxCalculation) {
+      this.textBoxCalculation = false;
+    }
+
+    nextTick(async () => {
+      const expectedCount = this.resizableRichTextBoxElements.length;
+      this.textBoxCalculationCount = 0;
+      this.textBoxCalculation = true;
+
+      const maxTries = 4 * 30; // 30 seconds
+      let tries = 1;
+      let lastCount = 0;
+
+      // Wait until all rich text boxes have updated
+      const poll = (resolve: (value: unknown) => void) => {
+        if (
+          this.textBoxCalculationCount === expectedCount ||
+          tries >= maxTries ||
+          this.textBoxCalculationCount < lastCount
+        ) {
+          resolve(true);
+        } else {
+          tries++;
+          lastCount = this.textBoxCalculationCount;
+          setTimeout(() => poll(resolve), 250);
+        }
+      };
+
+      await new Promise(poll);
+
+      this.textBoxCalculation = false;
       this.saveDebounced();
     });
   }
@@ -6428,9 +6574,13 @@ export default class Editor extends Vue {
     // blinking cursors don't show up in the printed page
     const activeElement = this.blurActiveElement();
 
+    const previousTitle = window.document.title;
+    window.document.title = this.getFileName(this.selectedWorkspace, false);
+
     nextTick(async () => {
       await this.ipcService.printWorkspace(this.selectedWorkspace);
       this.printMode = false;
+      window.document.title = previousTitle;
 
       // Re-focus the active element
       this.focusElement(activeElement);
@@ -6444,9 +6594,13 @@ export default class Editor extends Vue {
     // blinking cursors don't show up in the printed page
     const activeElement = this.blurActiveElement();
 
+    const previousTitle = window.document.title;
+    window.document.title = this.getFileName(this.selectedWorkspace, false);
+
     await nextTick();
     await this.ipcService.exportWorkspaceAsPdf(this.selectedWorkspace);
     this.printMode = false;
+    window.document.title = previousTitle;
 
     // Re-focus the active element
     this.focusElement(activeElement);
@@ -6838,6 +6992,7 @@ export default class Editor extends Vue {
         this.score.pageSetup.textBoxDefaultFontSize
     ) {
       this.recalculateRichTextBoxHeights();
+      this.recalculateTextBoxHeights();
     }
 
     this.save();
@@ -6874,6 +7029,7 @@ export default class Editor extends Vue {
         this.score.pageSetup.textBoxDefaultFontSize
     ) {
       this.recalculateRichTextBoxHeights();
+      this.recalculateTextBoxHeights();
     }
 
     this.save();
@@ -6901,9 +7057,13 @@ export default class Editor extends Vue {
     }
 
     if (this.selectedElement.elementType === ElementType.TextBox) {
+      this.formatType = ElementType.TextBox;
       this.textBoxFormat = (
         this.selectedElement as TextBoxElement
       ).cloneFormat();
+    } else if (this.selectedElement.elementType === ElementType.Note) {
+      this.formatType = ElementType.Note;
+      this.noteFormat = (this.selectedElement as NoteElement).cloneFormat();
     }
   }
 
@@ -6934,7 +7094,7 @@ export default class Editor extends Vue {
     if (!this.isTextInputFocused() && !this.dialogOpen) {
       this.onPasteScoreElements(false);
     } else {
-      document.execCommand('paste');
+      this.ipcService.paste();
     }
   }
 
@@ -6942,19 +7102,51 @@ export default class Editor extends Vue {
     if (!this.isTextInputFocused() && !this.dialogOpen) {
       this.onPasteScoreElements(true);
     } else {
-      document.execCommand('paste');
+      this.ipcService.paste();
     }
   }
 
   onFileMenuPasteFormat() {
-    if (this.selectedElement == null || this.textBoxFormat == null) {
-      return;
+    const normalizedRange = this.getNormalizedSelectionRange();
+
+    const commands: Command[] = [];
+
+    if (normalizedRange != null) {
+      for (let i = normalizedRange.start; i <= normalizedRange.end; i++) {
+        if (this.elements[i].elementType === this.formatType) {
+          this.applyCopiedFormat(this.elements[i], commands);
+        }
+      }
+    } else if (this.selectedElement != null) {
+      this.applyCopiedFormat(this.selectedElement, commands);
     }
 
-    if (this.selectedElement.elementType === ElementType.TextBox) {
-      this.updateTextBox(
-        this.selectedElement as TextBoxElement,
-        this.textBoxFormat,
+    if (commands.length > 0) {
+      this.commandService.executeAsBatch(commands);
+      this.save();
+    }
+  }
+
+  applyCopiedFormat(element: ScoreElement, commands: Command[]) {
+    if (
+      element.elementType === ElementType.TextBox &&
+      this.textBoxFormat != null
+    ) {
+      commands.push(
+        this.textBoxCommandFactory.create('update-properties', {
+          target: element as TextBoxElement,
+          newValues: this.textBoxFormat,
+        }),
+      );
+    } else if (
+      element.elementType === ElementType.Note &&
+      this.noteFormat != null
+    ) {
+      commands.push(
+        this.noteElementCommandFactory.create('update-properties', {
+          target: element as NoteElement,
+          newValues: this.noteFormat,
+        }),
       );
     }
   }
@@ -7073,7 +7265,9 @@ export default class Editor extends Vue {
     title.lineHeight = score.pageSetup.textBoxDefaultLineHeight;
     title.bold = score.pageSetup.textBoxDefaultFontWeight === '700';
     title.italic = score.pageSetup.textBoxDefaultFontStyle === 'italic';
-
+    title.height = Math.round(
+      TextMeasurementService.getFontHeight(title.computedFont) * 1.2,
+    );
     score.staff.elements.unshift(
       title,
       this.createDefaultModeKey(score.pageSetup),
@@ -7256,6 +7450,11 @@ export default class Editor extends Vue {
   position: absolute;
 }
 
+.header-footer-hr {
+  position: absolute;
+  border-top-style: solid;
+}
+
 .red {
   color: #ed0000;
 }
@@ -7288,7 +7487,8 @@ export default class Editor extends Vue {
   display: none;
 }
 
-.richTextBoxCalculation {
+.richTextBoxCalculation,
+.textBoxCalculation {
   position: absolute;
   left: -99999999px;
 }
@@ -7541,6 +7741,9 @@ export default class Editor extends Vue {
 .page.print .drop-cap-container,
 .page.print .mode-key-container,
 .page.print .image-box-container,
+.page.print :deep(.text-box),
+.page.print :deep(.rich-text-editor),
+.page.print :deep(.inline-container),
 .page.print :deep(.text-box.multipanel) {
   border: none;
   outline: none;
@@ -7568,7 +7771,7 @@ export default class Editor extends Vue {
 }
 
 .page.print :deep(.rich-text-editor) {
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 @media print {
