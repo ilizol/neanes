@@ -151,6 +151,7 @@ export default class TextBoxRich extends Vue {
           'Omega' + ',' + this.pageSetup.neumeDefaultFontFamily,
           'Neanes',
           'NeanesStathisSeries',
+          'Almouzios',
           ...fonts,
         ],
       },

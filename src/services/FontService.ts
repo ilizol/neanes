@@ -5,10 +5,10 @@ import metadataStathis from '@/assets/fonts/neanesstathisseries.metadata.json';
 import { SbmuflGlyphName } from '@/services/NeumeMappingService';
 
 const metadataMap = new Map();
-metadataMap.set('Almouzios', metadataAlmouzios);
 metadataMap.set('Neanes', metadata);
 metadataMap.set('NeanesRTL', metadataRtl);
 metadataMap.set('NeanesStathisSeries', metadataStathis);
+metadataMap.set('Almouzios', metadataAlmouzios);
 
 class FontService {
   getMetadata(fontFamily: string) {
