@@ -133,8 +133,7 @@ export const INSERT_NEUME_DEFAULT_ATTRIBUTES_MARTYRIA: InsertNeumeDefaultAttribu
     },
     Almouzios: {
       neumeFontSize: 1.7,
-      top: 0,
-      kerningLeft: 0,
+      top: -0.8,
     },
   };
 
