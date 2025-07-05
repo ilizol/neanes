@@ -33,8 +33,8 @@
         0.681
       ],
       "gorgonBottom": [
-        0.662,
-        -0.107
+        0.78,
+        -0.08
       ],
       "heteronConnecting": [
         1.649,
@@ -89,8 +89,8 @@
         0.25
       ],
       "gorgonTop": [
-        0.735,
-        0.273
+        0.78,
+        0.2
       ]
     },
     "oligonKentimaBelow": {
@@ -99,8 +99,8 @@
         -0.412
       ],
       "gorgonBottom": [
-        0.399,
-        -0.107
+        0.5,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -167,12 +167,12 @@
         0.387
       ],
       "klasmaTop": [
-        0.742,
-        0.255
+        0.65,
+        0.25
       ],
       "gorgonTop": [
-        0.729,
-        0.268
+        0.65,
+        0.2
       ],
       "psifiston": [
         0.839,
@@ -205,8 +205,8 @@
         0.681
       ],
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.7,
+        -0.08
       ],
       "heteronConnecting": [
         1.641,
@@ -261,14 +261,14 @@
         -0.119
       ],
       "gorgonTop": [
-        0.729,
-        0.268
+        0.68,
+        0.2
       ]
     },
     "oligonKentimaAbove": {
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -339,16 +339,16 @@
         0.387
       ],
       "klasmaTop": [
-        0.332,
-        0.255
+        0.23,
+        0.25
       ],
       "klasmaBottom": [
-        0.734,
-        -0.072
+        0.68,
+        -0.07
       ],
       "gorgonTop": [
-        1.087,
-        0.268
+        1.09,
+        0.2
       ],
       "psifiston": [
         0.789,
@@ -357,8 +357,8 @@
     },
     "oligonYpsiliRight": {
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -429,16 +429,16 @@
         0.387
       ],
       "klasmaTop": [
-        0.547,
-        0.255
+        0.5,
+        0.25
       ],
       "klasmaBottom": [
-        0.734,
-        -0.072
+        0.68,
+        -0.07
       ],
       "gorgonTop": [
-        0.657,
-        0.268
+        0.4,
+        0.2
       ],
       "psifiston": [
         0.789,
@@ -447,8 +447,8 @@
     },
     "oligonYpsiliLeft": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -519,16 +519,16 @@
         0.387
       ],
       "klasmaTop": [
-        0.93,
-        0.255
+        0.8,
+        0.25
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "gorgonTop": [
-        1.052,
-        0.268
+        0.8,
+        0.2
       ],
       "psifiston": [
         0.79,
@@ -537,8 +537,8 @@
     },
     "oligonKentimaYpsiliRight": {
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -609,16 +609,16 @@
         0.387
       ],
       "klasmaTop": [
-        0.302,
-        0.255
+        0.23,
+        0.25
       ],
       "klasmaBottom": [
-        0.734,
-        -0.072
+        0.68,
+        -0.07
       ],
       "gorgonTop": [
-        0.657,
-        0.607
+        0.2,
+        0.2
       ],
       "psifiston": [
         0.789,
@@ -627,8 +627,8 @@
     },
     "oligonKentimaYpsiliMiddle": {
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -643,8 +643,8 @@
         0.603
       ],
       "klasmaTop": [
-        0.302,
-        0.255
+        0.23,
+        0.25
       ],
       "measureNumber": [
         0.031,
@@ -699,12 +699,12 @@
         0.387
       ],
       "klasmaBottom": [
-        0.734,
-        -0.072
+        0.68,
+        -0.07
       ],
       "gorgonTop": [
-        1.087,
-        0.268
+        1.09,
+        0.2
       ],
       "psifiston": [
         0.789,
@@ -713,8 +713,8 @@
     },
     "oligonDoubleYpsili": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -785,12 +785,12 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "gorgonTop": [
-        0.707,
-        0.268
+        0.6,
+        0.2
       ],
       "psifiston": [
         0.79,
@@ -799,8 +799,8 @@
     },
     "oligonKentimataDoubleYpsili": {
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.78,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -871,8 +871,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.734,
-        -0.072
+        0.73,
+        -0.07
       ],
       "psifiston": [
         0.789,
@@ -959,8 +959,8 @@
         -0.139
       ],
       "gorgonTop": [
-        1.343,
-        0.153
+        1.3,
+        0.1
       ],
       "diesis": [
         0.282,
@@ -1041,8 +1041,8 @@
         -0.172
       ],
       "gorgonTop": [
-        0.337,
-        0.295
+        0.25,
+        0.29
       ]
     },
     "runningElafron": {
@@ -1119,8 +1119,8 @@
         -0.162
       ],
       "gorgonTop": [
-        1.096,
-        0.348
+        1.35,
+        0.32
       ],
       "diesis": [
         0.886,
@@ -1131,8 +1131,8 @@
         0.304
       ],
       "klasmaTop": [
-        1.009,
-        0.388
+        1.35,
+        0.34
       ]
     },
     "elafron": {
@@ -1161,8 +1161,8 @@
         0.665
       ],
       "gorgonBottom": [
-        0.436,
-        -0.25
+        0.73,
+        -0.15
       ],
       "heteronConnecting": [
         1.369,
@@ -1193,8 +1193,8 @@
         -0.162
       ],
       "gorgonTop": [
-        0.576,
-        0.348
+        0.65,
+        0.32
       ],
       "diesis": [
         0.376,
@@ -1211,8 +1211,8 @@
     },
     "elafronApostrofos": {
       "gorgonBottom": [
-        0.436,
-        -0.325
+        0.73,
+        -0.15
       ],
       "yfenAbove": [
         0.579,
@@ -1267,8 +1267,8 @@
         -0.262
       ],
       "gorgonTop": [
-        0.576,
-        0.348
+        0.65,
+        0.32
       ],
       "diesis": [
         0.376,
@@ -1279,8 +1279,8 @@
         0.304
       ],
       "klasmaTop": [
-        0.509,
-        0.388
+        0.65,
+        0.34
       ]
     },
     "chamiliApostrofos": {
@@ -1337,8 +1337,8 @@
         -0.362
       ],
       "gorgonTop": [
-        0.769,
-        0.448
+        0.9,
+        0.35
       ],
       "diesis": [
         0.278,
@@ -1349,8 +1349,8 @@
         0.515
       ],
       "klasmaTop": [
-        0.697,
-        0.281
+        0.95,
+        0.31
       ]
     },
     "chamili": {
@@ -1379,8 +1379,8 @@
         0.665
       ],
       "gorgonBottom": [
-        0.342,
-        -0.107
+        0.83,
+        -0.1
       ],
       "heteronConnecting": [
         1.233,
@@ -1411,8 +1411,8 @@
         0.008
       ],
       "gorgonTop": [
-        0.768,
-        0.448
+        0.9,
+        0.3
       ],
       "diesis": [
         0.342,
@@ -1423,8 +1423,8 @@
         0.515
       ],
       "klasmaTop": [
-        0.696,
-        0.281
+        0.95,
+        0.26
       ]
     },
     "chamiliElafron": {
@@ -1481,8 +1481,8 @@
         -0.142
       ],
       "gorgonTop": [
-        0.768,
-        0.778
+        0.9,
+        0.67
       ],
       "diesis": [
         0.407,
@@ -1493,8 +1493,8 @@
         0.819
       ],
       "klasmaTop": [
-        0.756,
-        0.588
+        0.95,
+        0.63
       ]
     },
     "chamiliElafronApostrofos": {
@@ -1551,8 +1551,8 @@
         -0.252
       ],
       "gorgonTop": [
-        0.768,
-        0.778
+        0.9,
+        0.67
       ],
       "diesis": [
         0.407,
@@ -1563,8 +1563,8 @@
         0.819
       ],
       "klasmaTop": [
-        0.756,
-        0.588
+        0.95,
+        0.63
       ]
     },
     "doubleChamili": {
@@ -1621,8 +1621,8 @@
         0.008
       ],
       "gorgonTop": [
-        0.768,
-        0.795
+        1.0,
+        0.65
       ],
       "diesis": [
         0.413,
@@ -1633,8 +1633,8 @@
         0.865
       ],
       "klasmaTop": [
-        0.656,
-        0.701
+        1.05,
+        0.63
       ]
     },
     "petastiIson": {
@@ -1699,8 +1699,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petasti": {
@@ -1765,8 +1765,8 @@
         -0.092
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiOligon": {
@@ -1827,8 +1827,8 @@
         0.614
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ],
       "diesis": [
         0.413,
@@ -1897,8 +1897,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiYpsiliRight": {
@@ -1963,8 +1963,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiYpsiliLeft": {
@@ -2029,8 +2029,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiKentimaYpsiliRight": {
@@ -2095,8 +2095,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiKentimaYpsiliMiddle": {
@@ -2161,8 +2161,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiApostrofos": {
@@ -2227,8 +2227,8 @@
         0.647
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiElafron": {
@@ -2293,8 +2293,8 @@
         0.793
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiElafronApostrofos": {
@@ -2359,8 +2359,8 @@
         0.793
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiChamili": {
@@ -2425,8 +2425,8 @@
         0.793
       ],
       "klasmaBottom": [
-        0.797,
-        -0.149
+        0.75,
+        -0.15
       ]
     },
     "kentimata": {
@@ -2451,8 +2451,8 @@
         0.521
       ],
       "gorgonBottom": [
-        0.303,
-        -0.25
+        0.33,
+        -0.14
       ],
       "isonIndicator": [
         0.031,
@@ -2479,8 +2479,8 @@
         0.319
       ],
       "gorgonTop": [
-        0.402,
-        0.315
+        0.25,
+        0.22
       ]
     },
     "oligonKentimataAbove": {
@@ -2545,8 +2545,8 @@
         -0.119
       ],
       "gorgonTop": [
-        0.651,
-        0.535
+        0.58,
+        0.51
       ]
     },
     "oligonIsonKentimata": {
@@ -2579,8 +2579,8 @@
         -0.251
       ],
       "gorgonSecondary": [
-        0.574,
-        0.471
+        0.6,
+        0.47
       ],
       "measureNumber": [
         0.031,
@@ -2619,8 +2619,8 @@
         -0.119
       ],
       "gorgonTop": [
-        1.129,
-        0.528
+        1.05,
+        0.52
       ]
     },
     "oligonYpsiliLeftKentimata": {
@@ -2677,8 +2677,8 @@
         -0.119
       ],
       "gorgonTop": [
-        0.79,
-        0.555
+        0.75,
+        0.51
       ]
     },
     "oligonApostrofosKentimata": {
@@ -2711,8 +2711,8 @@
         -0.251
       ],
       "gorgonSecondary": [
-        0.36,
-        0.642
+        0.37,
+        0.58
       ],
       "measureNumber": [
         0.032,
@@ -2751,8 +2751,8 @@
         -0.119
       ],
       "gorgonTop": [
-        1.133,
-        0.508
+        1.06,
+        0.52
       ]
     },
     "oligonElafronKentimata": {
@@ -2769,8 +2769,8 @@
         0.68
       ],
       "gorgonSecondary": [
-        0.417,
-        0.707
+        0.45,
+        0.51
       ],
       "yfenAbove": [
         0.809,
@@ -2789,8 +2789,8 @@
         -0.251
       ],
       "gorgonTop": [
-        1.176,
-        0.501
+        1.12,
+        0.5
       ],
       "measureNumber": [
         0.031,
@@ -2899,12 +2899,12 @@
         -0.119
       ],
       "gorgonSecondary": [
-        0.559,
-        0.561
+        0.5,
+        0.55
       ],
       "gorgonTop": [
-        1.076,
-        0.501
+        1.02,
+        0.52
       ]
     },
     "oligonKentimataBelow": {
@@ -2989,12 +2989,12 @@
         0.387
       ],
       "klasmaTop": [
-        0.742,
-        0.255
+        0.65,
+        0.25
       ],
       "gorgonTop": [
-        0.712,
-        0.273
+        0.68,
+        0.2
       ],
       "psifiston": [
         0.789,
@@ -3003,8 +3003,8 @@
     },
     "oligonKentimaTripleYpsili": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.78,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -3075,8 +3075,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.73,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -3085,8 +3085,8 @@
     },
     "oligonIson": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -3149,8 +3149,8 @@
         -0.023
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "diesis": [
         0.35,
@@ -3167,8 +3167,8 @@
     },
     "oligonElafron": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -3239,8 +3239,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -3325,14 +3325,14 @@
         -0.103
       ],
       "klasmaBottom": [
-        1.02,
-        -0.179
+        1.38,
+        -0.15
       ]
     },
     "oligonApostrofos": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -3403,8 +3403,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -3417,8 +3417,8 @@
         0.646
       ],
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -3489,8 +3489,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -3503,8 +3503,8 @@
         0.584
       ],
       "gorgonTop": [
-        0.779,
-        0.526
+        0.72,
+        0.45
       ],
       "yfenAbove": [
         0.651,
@@ -3567,8 +3567,8 @@
         0.625
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "oligonRunningElafronKentimata": {
@@ -3601,8 +3601,8 @@
         0.62
       ],
       "gorgonSecondary": [
-        0.859,
-        0.657
+        0.85,
+        0.51
       ],
       "yfenAbove": [
         1.121,
@@ -3657,8 +3657,8 @@
         -0.119
       ],
       "gorgonTop": [
-        1.611,
-        0.508
+        1.55,
+        0.5
       ]
     },
     "oligonElafronApostrofosKentimata": {
@@ -3675,8 +3675,8 @@
         0.68
       ],
       "gorgonSecondary": [
-        0.487,
-        0.707
+        0.45,
+        0.51
       ],
       "yfenAbove": [
         0.779,
@@ -3731,8 +3731,8 @@
         -0.119
       ],
       "gorgonTop": [
-        1.186,
-        0.501
+        1.12,
+        0.5
       ]
     },
     "oligonKentimaMiddleKentimata": {
@@ -3789,8 +3789,8 @@
         -0.119
       ],
       "gorgonTop": [
-        0.702,
-        0.535
+        0.58,
+        0.51
       ]
     },
     "oligonYpsiliRightKentimata": {
@@ -3847,8 +3847,8 @@
         -0.119
       ],
       "gorgonTop": [
-        0.742,
-        0.521
+        0.67,
+        0.51
       ]
     },
     "petastiChamiliApostrofos": {
@@ -3913,8 +3913,8 @@
         0.793
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "apostrofos": {
@@ -3947,8 +3947,8 @@
         0.653
       ],
       "gorgonBottom": [
-        0.297,
-        -0.25
+        0.45,
+        -0.14
       ],
       "apli": [
         0.449,
@@ -3971,8 +3971,8 @@
         -0.133
       ],
       "gorgonTop": [
-        0.349,
-        0.348
+        0.37,
+        0.3
       ],
       "diesis": [
         0.182,
@@ -3983,14 +3983,14 @@
         0.325
       ],
       "klasmaTop": [
-        0.357,
-        0.335
+        0.35,
+        0.32
       ]
     },
     "oligonKentimataTripleYpsili": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.78,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -4061,8 +4061,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.73,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -4123,8 +4123,8 @@
         -0.462
       ],
       "gorgonTop": [
-        0.768,
-        0.815
+        1.0,
+        0.7
       ],
       "diesis": [
         0.411,
@@ -4135,8 +4135,8 @@
         0.865
       ],
       "klasmaTop": [
-        0.656,
-        0.701
+        1.05,
+        0.7
       ]
     },
     "doubleChamiliElafron": {
@@ -4193,8 +4193,8 @@
         -0.352
       ],
       "gorgonTop": [
-        0.768,
-        0.815
+        1.0,
+        0.7
       ],
       "diesis": [
         0.411,
@@ -4205,8 +4205,8 @@
         0.865
       ],
       "klasmaTop": [
-        0.656,
-        0.701
+        1.05,
+        0.7
       ]
     },
     "doubleChamiliApostrofos": {
@@ -4263,8 +4263,8 @@
         -0.352
       ],
       "gorgonTop": [
-        0.768,
-        0.815
+        1.0,
+        0.7
       ],
       "diesis": [
         0.407,
@@ -4275,8 +4275,8 @@
         0.865
       ],
       "klasmaTop": [
-        0.656,
-        0.701
+        1.05,
+        0.7
       ]
     },
     "petastiKentimataDoubleYpsili": {
@@ -4341,8 +4341,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiKentimaDoubleYpsiliRight": {
@@ -4407,8 +4407,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiKentimaDoubleYpsiliLeft": {
@@ -4473,8 +4473,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.789,
-        -0.149
+        0.74,
+        -0.15
       ]
     },
     "petastiKentimataTripleYpsili": {
@@ -4539,8 +4539,8 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.789,
-        -0.149
+        0.74,
+        -0.15
       ]
     },
     "petastiTripleYpsili": {
@@ -4605,14 +4605,14 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.74,
+        -0.15
       ]
     },
     "oligonKentimaDoubleYpsiliRight": {
       "gorgonBottom": [
-        0.616,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.879,
@@ -4683,8 +4683,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.734,
-        -0.072
+        0.68,
+        -0.07
       ],
       "psifiston": [
         0.789,
@@ -4693,8 +4693,8 @@
     },
     "oligonKentimaDoubleYpsiliLeft": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.78,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -4765,8 +4765,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.73,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -4775,8 +4775,8 @@
     },
     "oligonTripleYpsili": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.78,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -4847,8 +4847,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.73,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -4857,8 +4857,8 @@
     },
     "oligonElafronApostrofos": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -4929,8 +4929,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.68,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -4999,14 +4999,14 @@
         -0.085
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.74,
+        -0.15
       ]
     },
     "oligonChamili": {
       "gorgonBottom": [
-        0.617,
-        -0.107
+        0.88,
+        -0.08
       ],
       "yfenAbove": [
         0.88,
@@ -5077,8 +5077,8 @@
         0.387
       ],
       "klasmaBottom": [
-        0.735,
-        -0.072
+        0.8,
+        -0.07
       ],
       "psifiston": [
         0.79,
@@ -5147,8 +5147,8 @@
         1.105
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiChamiliElafronApostrofos": {
@@ -5213,8 +5213,8 @@
         1.105
       ],
       "klasmaBottom": [
-        0.749,
-        -0.149
+        0.7,
+        -0.15
       ]
     },
     "petastiDoubleChamili": {
@@ -5279,8 +5279,8 @@
         1.105
       ],
       "klasmaBottom": [
-        0.797,
-        -0.295
+        0.75,
+        -0.3
       ]
     },
     "petastiDoubleChamiliApostrofos": {
@@ -5345,8 +5345,8 @@
         1.105
       ],
       "klasmaBottom": [
-        0.749,
-        -0.297
+        0.75,
+        -0.3
       ]
     },
     "gorgonAbove": {
@@ -5357,7 +5357,7 @@
     },
     "gorgonBelow": {
       "gorgonBottom": [
-        -0.121,
+        0.0,
         0.26
       ]
     },
@@ -5375,8 +5375,8 @@
     },
     "oligonKentimaMiddle": {
       "gorgonBottom": [
-        0.667,
-        -0.107
+        0.7,
+        -0.08
       ],
       "yfenAbove": [
         0.93,
@@ -5447,12 +5447,12 @@
         0.387
       ],
       "klasmaTop": [
-        0.793,
-        0.255
+        0.65,
+        0.25
       ],
       "gorgonTop": [
-        0.708,
-        0.227
+        0.68,
+        0.2
       ],
       "psifiston": [
         0.84,
@@ -5525,8 +5525,8 @@
         -0.112
       ],
       "gorgonTop": [
-        0.728,
-        0.965
+        1.08,
+        0.96
       ],
       "diesis": [
         0.413,
@@ -5537,8 +5537,8 @@
         0.995
       ],
       "klasmaTop": [
-        0.636,
-        0.875
+        1.15,
+        0.95
       ]
     },
     "digorgonDottedLeftAbove": {
@@ -5947,12 +5947,12 @@
         -0.099
       ],
       "gorgonTop": [
-        0.713,
-        0.273
+        0.68,
+        0.2
       ],
       "klasmaTop": [
-        0.743,
-        0.255
+        0.65,
+        0.25
       ],
       "yfesis": [
         1.266,
@@ -6041,8 +6041,8 @@
         -0.07
       ],
       "klasmaBottom": [
-        0.789,
-        -0.149
+        0.78,
+        -0.15
       ],
       "antikenoma": [
         0.702,
@@ -6127,8 +6127,8 @@
     },
     "leimma1": {
       "gorgonTop": [
-        0.774,
-        0.191
+        0.7,
+        0.19
       ]
     },
     "digorgonDottedRight": {
@@ -6169,7 +6169,7 @@
     },
     "diargon": {
       "gorgonTop": [
-        -0.001,
+        0.0,
         0.8
       ]
     },
@@ -6987,8 +6987,8 @@
         0.67
       ],
       "gorgonSecondary": [
-        0.605,
-        0.678
+        0.8,
+        0.48
       ],
       "yfenAbove": [
         0.98,
@@ -7043,8 +7043,8 @@
         -0.119
       ],
       "gorgonTop": [
-        1.3,
-        0.508
+        1.25,
+        0.5
       ]
     },
     "psifiston.salt01": {
@@ -8704,41 +8704,41 @@
     },
     "gorgonAbove": {
       "bBoxNE": [
-        0.148,
+        0.202,
         0.971
       ],
       "bBoxSW": [
-        -0.256,
+        -0.202,
         0.818
       ]
     },
     "gorgonBelow": {
       "bBoxNE": [
-        0.178,
+        0.202,
         0.218
       ],
       "bBoxSW": [
-        -0.226,
+        -0.202,
         0.065
       ]
     },
     "gorgonDottedLeft": {
       "bBoxNE": [
-        0.147,
+        0.201,
         0.972
       ],
       "bBoxSW": [
-        -0.419,
+        -0.365,
         0.818
       ]
     },
     "digorgon": {
       "bBoxNE": [
-        0.232,
+        0.254,
         1.112
       ],
       "bBoxSW": [
-        -0.276,
+        -0.254,
         0.82
       ]
     },
@@ -8774,21 +8774,21 @@
     },
     "gorgonDottedRight": {
       "bBoxNE": [
-        0.311,
+        0.366,
         0.984
       ],
       "bBoxSW": [
-        -0.258,
+        -0.202,
         0.818
       ]
     },
     "digorgonDottedLeftBelow": {
       "bBoxNE": [
-        0.232,
+        0.254,
         1.112
       ],
       "bBoxSW": [
-        -0.42,
+        -0.398,
         0.82
       ]
     },
@@ -8864,11 +8864,11 @@
     },
     "digorgonDottedLeftAbove": {
       "bBoxNE": [
-        0.232,
+        0.254,
         1.126
       ],
       "bBoxSW": [
-        -0.276,
+        -0.254,
         0.82
       ]
     },
@@ -9314,81 +9314,81 @@
     },
     "digorgonDottedRight": {
       "bBoxNE": [
-        0.386,
-        1.114
+        0.408,
+        1.113
       ],
       "bBoxSW": [
-        -0.276,
-        0.821
+        -0.254,
+        0.82
       ]
     },
     "trigorgon": {
       "bBoxNE": [
-        0.321,
+        0.324,
         1.21
       ],
       "bBoxSW": [
-        -0.326,
+        -0.324,
         0.813
       ]
     },
     "trigorgonDottedLeftBelow": {
       "bBoxNE": [
-        0.321,
+        0.324,
         1.21
       ],
       "bBoxSW": [
-        -0.482,
+        -0.479,
         0.813
       ]
     },
     "trigorgonDottedLeftAbove": {
       "bBoxNE": [
-        0.321,
+        0.324,
         1.226
       ],
       "bBoxSW": [
-        -0.326,
+        -0.324,
         0.813
       ]
     },
     "trigorgonDottedRight": {
       "bBoxNE": [
-        0.481,
+        0.483,
         1.21
       ],
       "bBoxSW": [
-        -0.326,
+        -0.324,
         0.813
       ]
     },
     "argon": {
       "bBoxNE": [
-        0.226,
+        0.19,
         0.955
       ],
       "bBoxSW": [
-        -0.155,
+        -0.19,
         0.802
       ]
     },
     "diargon": {
       "bBoxNE": [
-        0.226,
+        0.191,
         1.095
       ],
       "bBoxSW": [
-        -0.157,
+        -0.191,
         0.802
       ]
     },
     "triargon": {
       "bBoxNE": [
-        0.253,
+        0.254,
         1.096
       ],
       "bBoxSW": [
-        -0.256,
+        -0.254,
         0.803
       ]
     },
@@ -10764,11 +10764,11 @@
     },
     "gorgonSecondary": {
       "bBoxNE": [
-        0.148,
+        0.202,
         0.971
       ],
       "bBoxSW": [
-        -0.256,
+        -0.202,
         0.818
       ]
     },
@@ -10834,81 +10834,81 @@
     },
     "gorgonDottedLeftSecondary": {
       "bBoxNE": [
-        0.147,
+        0.201,
         0.972
       ],
       "bBoxSW": [
-        -0.419,
+        -0.365,
         0.818
       ]
     },
     "gorgonDottedRightSecondary": {
       "bBoxNE": [
-        0.311,
+        0.366,
         0.984
       ],
       "bBoxSW": [
-        -0.258,
+        -0.202,
         0.818
       ]
     },
     "digorgonSecondary": {
       "bBoxNE": [
-        0.232,
+        0.254,
         1.112
       ],
       "bBoxSW": [
-        -0.276,
+        -0.254,
         0.82
       ]
     },
     "digorgonDottedLeftBelowSecondary": {
       "bBoxNE": [
-        0.232,
+        0.254,
         1.112
       ],
       "bBoxSW": [
-        -0.42,
+        -0.398,
         0.82
       ]
     },
     "digorgonDottedRightSecondary": {
       "bBoxNE": [
-        0.386,
-        1.114
+        0.408,
+        1.113
       ],
       "bBoxSW": [
-        -0.276,
-        0.821
+        -0.254,
+        0.82
       ]
     },
     "trigorgonSecondary": {
       "bBoxNE": [
-        0.321,
+        0.324,
         1.21
       ],
       "bBoxSW": [
-        -0.326,
+        -0.324,
         0.813
       ]
     },
     "trigorgonDottedLeftBelowSecondary": {
       "bBoxNE": [
-        0.321,
+        0.324,
         1.21
       ],
       "bBoxSW": [
-        -0.482,
+        -0.479,
         0.813
       ]
     },
     "trigorgonDottedRightSecondary": {
       "bBoxNE": [
-        0.481,
+        0.483,
         1.21
       ],
       "bBoxSW": [
-        -0.326,
+        -0.324,
         0.813
       ]
     },
@@ -11464,21 +11464,21 @@
     },
     "digorgonDottedLeftSecondary": {
       "bBoxNE": [
-        0.232,
+        0.254,
         1.126
       ],
       "bBoxSW": [
-        -0.276,
+        -0.254,
         0.82
       ]
     },
     "trigorgonDottedLeftSecondary": {
       "bBoxNE": [
-        0.321,
+        0.324,
         1.226
       ],
       "bBoxSW": [
-        -0.326,
+        -0.324,
         0.813
       ]
     },
