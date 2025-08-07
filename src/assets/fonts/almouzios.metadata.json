@@ -7504,61 +7504,61 @@
     "barlineShortSingleAbove": {
       "barlineAboveFthora": [
         0.0,
-        0.56
+        0.0
       ],
       "barline": [
         0.0,
-        0.59
+        0.03
       ]
     },
     "barlineSingleAbove": {
       "barlineAboveFthora": [
         0.0,
-        0.1
+        0.0
       ],
       "barline": [
         0.0,
-        0.13
+        0.03
       ]
     },
     "barlineDoubleAbove": {
       "barlineAboveFthora": [
         0.0,
-        0.1
+        0.0
       ],
       "barline": [
         0.0,
-        0.13
+        0.03
       ]
     },
     "barlineTheseosAbove": {
       "barlineAboveFthora": [
         0.0,
-        0.1
+        0.0
       ],
       "barline": [
         0.0,
-        0.13
+        0.03
       ]
     },
     "barlineShortDoubleAbove": {
       "barlineAboveFthora": [
         0.0,
-        0.56
+        0.0
       ],
       "barline": [
         0.0,
-        0.59
+        0.03
       ]
     },
     "barlineShortTheseosAbove": {
       "barlineAboveFthora": [
         0.0,
-        0.56
+        0.0
       ],
       "barline": [
         0.0,
-        0.59
+        0.03
       ]
     },
     "diesis2Secondary": {
@@ -7923,11 +7923,11 @@
     "gorthmikon": 0.612,
     "pelastikon": 0.62,
     "barlineSingle": 0.09,
-    "barlineDouble": 0.189,
-    "barlineTheseos": 0.097,
-    "barlineShortSingle": 0.097,
+    "barlineDouble": 0.19,
+    "barlineTheseos": 0.09,
+    "barlineShortSingle": 0.09,
     "barlineShortDouble": 0.18,
-    "barlineShortTheseos": 0.069,
+    "barlineShortTheseos": 0.09,
     "breath": 0.234,
     "koronis": 0.0,
     "leimmaDot": 0.26,
@@ -9009,71 +9009,71 @@
     "martyriaNoteVouLow": {
       "bBoxNE": [
         0.517,
-        -0.506
+        -0.556
       ],
       "bBoxSW": [
         0.223,
-        -0.918
+        -0.968
       ]
     },
     "martyriaNoteGaLow": {
       "bBoxNE": [
         0.534,
-        -0.539
+        -0.579
       ],
       "bBoxSW": [
         0.166,
-        -0.882
+        -0.922
       ]
     },
     "martyriaNoteDiLow": {
       "bBoxNE": [
         0.486,
-        -0.544
+        -0.564
       ],
       "bBoxSW": [
         0.154,
-        -0.873
+        -0.893
       ]
     },
     "martyriaNoteKeLow": {
       "bBoxNE": [
         0.515,
-        -0.541
+        -0.581
       ],
       "bBoxSW": [
         0.185,
-        -0.877
+        -0.917
       ]
     },
     "martyriaNoteZo": {
       "bBoxNE": [
         0.538,
-        -0.069
+        -0.079
       ],
       "bBoxSW": [
         0.162,
-        -0.403
+        -0.413
       ]
     },
     "martyriaNotePa": {
       "bBoxNE": [
         0.537,
-        -0.131
+        -0.171
       ],
       "bBoxSW": [
         0.123,
-        -0.379
+        -0.419
       ]
     },
     "martyriaNoteNi": {
       "bBoxNE": [
         0.525,
-        -0.081
+        -0.111
       ],
       "bBoxSW": [
         0.135,
-        -0.394
+        -0.424
       ]
     },
     "martyriaNoteVou": {
@@ -9093,7 +9093,7 @@
       ],
       "bBoxSW": [
         0.135,
-        -0.394
+        -0.424
       ]
     },
     "martyriaNoteGa": {
@@ -9109,21 +9109,21 @@
     "martyriaNoteDi": {
       "bBoxNE": [
         0.486,
-        -0.061
+        -0.081
       ],
       "bBoxSW": [
         0.154,
-        -0.39
+        -0.41
       ]
     },
     "martyriaNoteKe": {
       "bBoxNE": [
         0.515,
-        -0.063
+        -0.073
       ],
       "bBoxSW": [
         0.185,
-        -0.399
+        -0.409
       ]
     },
     "martyriaNoteZoHigh": {
@@ -9133,7 +9133,7 @@
       ],
       "bBoxSW": [
         0.162,
-        -0.403
+        -0.413
       ]
     },
     "martyriaNotePaHigh": {
@@ -9143,7 +9143,7 @@
       ],
       "bBoxSW": [
         0.123,
-        -0.379
+        -0.419
       ]
     },
     "martyriaNoteVouHigh": {
@@ -9173,7 +9173,7 @@
       ],
       "bBoxSW": [
         0.154,
-        -0.39
+        -0.41
       ]
     },
     "martyriaNoteKeHigh": {
@@ -9183,7 +9183,7 @@
       ],
       "bBoxSW": [
         0.185,
-        -0.399
+        -0.409
       ]
     },
     "martyriaTick": {
@@ -9509,111 +9509,111 @@
     "martyriaDeltaBelow": {
       "bBoxNE": [
         0.235,
-        -0.127
+        -0.077
       ],
       "bBoxSW": [
         -0.267,
-        -0.676
+        -0.626
       ]
     },
     "martyriaAlphaBelow": {
       "bBoxNE": [
         0.24,
-        -0.111
+        -0.081
       ],
       "bBoxSW": [
         -0.153,
-        -0.716
+        -0.686
       ]
     },
     "martyriaLegetosBelow": {
       "bBoxNE": [
         0.235,
-        -0.028
+        0.012
       ],
       "bBoxSW": [
         -0.2,
-        -0.443
+        -0.403
       ]
     },
     "martyriaNanaBelow": {
       "bBoxNE": [
         0.304,
-        -0.066
+        0.004
       ],
       "bBoxSW": [
         -0.3,
-        -0.407
+        -0.337
       ]
     },
     "martyriaDeltaDottedBelow": {
       "bBoxNE": [
         0.235,
-        0.043
+        0.042
       ],
       "bBoxSW": [
         -0.267,
-        -0.676
+        -0.626
       ]
     },
     "martyriaAlphaDottedBelow": {
       "bBoxNE": [
         0.24,
-        0.039
+        0.042
       ],
       "bBoxSW": [
-        -0.191,
-        -0.716
+        -0.159,
+        -0.686
       ]
     },
     "martyriaHardChromaticPaBelow": {
       "bBoxNE": [
         0.241,
-        -0.086
+        -0.046
       ],
       "bBoxSW": [
         -0.281,
-        -0.243
+        -0.203
       ]
     },
     "martyriaHardChromaticDiBelow": {
       "bBoxNE": [
         0.342,
-        -0.02
+        0.09
       ],
       "bBoxSW": [
         -0.341,
-        -0.415
+        -0.305
       ]
     },
     "martyriaSoftChromaticDiBelow": {
       "bBoxNE": [
         0.241,
-        0.032
+        0.042
       ],
       "bBoxSW": [
         -0.281,
-        -0.243
+        -0.203
       ]
     },
     "martyriaSoftChromaticKeBelow": {
       "bBoxNE": [
         0.195,
-        -0.026
+        0.044
       ],
       "bBoxSW": [
         -0.207,
-        -0.372
+        -0.302
       ]
     },
     "martyriaZygosBelow": {
       "bBoxNE": [
         0.206,
-        -0.011
+        0.049
       ],
       "bBoxSW": [
         -0.218,
-        -0.374
+        -0.314
       ]
     },
     "martyriaZoAbove": {
@@ -9649,91 +9649,91 @@
     "martyriaLegetosAbove": {
       "bBoxNE": [
         0.235,
-        0.412
+        0.392
       ],
       "bBoxSW": [
         -0.2,
-        -0.003
+        -0.023
       ]
     },
     "martyriaNanaAbove": {
       "bBoxNE": [
         0.304,
-        0.384
+        0.334
       ],
       "bBoxSW": [
         -0.3,
-        0.043
+        -0.007
       ]
     },
     "martyriaDeltaDottedAbove": {
       "bBoxNE": [
         0.235,
-        0.653
+        0.592
       ],
       "bBoxSW": [
         -0.267,
-        -0.066
+        -0.076
       ]
     },
     "martyriaAlphaDottedAbove": {
       "bBoxNE": [
         0.24,
-        0.669
+        0.642
       ],
       "bBoxSW": [
-        -0.191,
+        -0.159,
         -0.086
       ]
     },
     "martyriaHardChromaticPaAbove": {
       "bBoxNE": [
         0.257,
-        0.214
+        0.154
       ],
       "bBoxSW": [
         -0.265,
-        0.057
+        -0.003
       ]
     },
     "martyriaHardChromaticDiAbove": {
       "bBoxNE": [
         0.342,
-        0.43
+        0.31
       ],
       "bBoxSW": [
         -0.341,
-        0.035
+        -0.085
       ]
     },
     "martyriaSoftChromaticDiAbove": {
       "bBoxNE": [
         0.257,
-        0.332
+        0.242
       ],
       "bBoxSW": [
         -0.265,
-        0.057
+        -0.003
       ]
     },
     "martyriaSoftChromaticKeAbove": {
       "bBoxNE": [
         0.195,
-        0.374
+        0.274
       ],
       "bBoxSW": [
         -0.207,
-        0.028
+        -0.072
       ]
     },
     "martyriaZygosAbove": {
       "bBoxNE": [
         0.206,
-        0.379
+        0.279
       ],
       "bBoxSW": [
         -0.218,
-        0.016
+        -0.084
       ]
     },
     "fthoraDiatonicNiLowAbove": {
@@ -10479,7 +10479,7 @@
     "modePlagalSecond": {
       "bBoxNE": [
         0.781,
-        0.283
+        0.243
       ],
       "bBoxSW": [
         0.15,
@@ -10778,7 +10778,7 @@
     },
     "barlineSingle": {
       "bBoxNE": [
-        0.064,
+        0.065,
         0.217
       ],
       "bBoxSW": [
@@ -10788,7 +10788,7 @@
     },
     "barlineDouble": {
       "bBoxNE": [
-        0.159,
+        0.16,
         0.217
       ],
       "bBoxSW": [
@@ -10798,21 +10798,21 @@
     },
     "barlineTheseos": {
       "bBoxNE": [
-        0.257,
+        0.254,
         0.349
       ],
       "bBoxSW": [
-        -0.16,
+        -0.164,
         -0.102
       ]
     },
     "barlineShortSingle": {
       "bBoxNE": [
-        0.068,
+        0.065,
         0.621
       ],
       "bBoxSW": [
-        0.029,
+        0.025,
         0.358
       ]
     },
@@ -10828,11 +10828,11 @@
     },
     "barlineShortTheseos": {
       "bBoxNE": [
-        0.243,
+        0.254,
         0.759
       ],
       "bBoxSW": [
-        -0.174,
+        -0.164,
         0.358
       ]
     },
@@ -11598,62 +11598,62 @@
     },
     "barlineShortSingleAbove": {
       "bBoxNE": [
-        0.019,
-        0.853
+        0.02,
+        0.293
       ],
       "bBoxSW": [
         -0.02,
-        0.59
+        0.03
       ]
     },
     "barlineSingleAbove": {
       "bBoxNE": [
-        0.019,
-        0.449
+        0.02,
+        0.349
       ],
       "bBoxSW": [
         -0.02,
-        0.13
+        0.03
       ]
     },
     "barlineDoubleAbove": {
       "bBoxNE": [
-        0.064,
-        0.449
+        0.065,
+        0.349
       ],
       "bBoxSW": [
         -0.065,
-        0.13
+        0.03
       ]
     },
     "barlineTheseosAbove": {
       "bBoxNE": [
-        0.209,
-        0.581
+        0.208,
+        0.481
       ],
       "bBoxSW": [
         -0.208,
-        0.13
+        0.03
       ]
     },
     "barlineShortDoubleAbove": {
       "bBoxNE": [
         0.061,
-        0.853
+        0.293
       ],
       "bBoxSW": [
         -0.061,
-        0.59
+        0.03
       ]
     },
     "barlineShortTheseosAbove": {
       "bBoxNE": [
-        0.21,
-        0.991
+        0.208,
+        0.431
       ],
       "bBoxSW": [
-        -0.207,
-        0.59
+        -0.208,
+        0.03
       ]
     },
     "diesis2Secondary": {
