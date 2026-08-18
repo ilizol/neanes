@@ -158,7 +158,9 @@
   /* The page canvas cushions white paper with a slightly quieter version of the
    * blue-violet chrome ramp. It is a pasteboard for the document, not a generic
    * dock pane surface. */
-  --chrome-paper-canvas: oklch(0.36 0.018 264);
+  /* --chrome-paper-canvas: oklch(0.36 0.018 264);*/
+  /* TODO change this */
+  --chrome-paper-canvas: yellow;
 
   /* Adapter: dockview -- active tabs still merge into the pane body, but the
    * surrounding group and inactive tabs now have enough tonal separation. */

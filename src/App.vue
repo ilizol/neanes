@@ -228,11 +228,45 @@ onBeforeUnmount(() => {
   }
 
   body {
-    overflow: visible !important;
+    /* overflow: visible !important; */
+    /* TODO debug this */
+    /* padding-right: 0 !important; */
+    /* margin-right: 0 !important; */
+    /* padding-left: 0 !important; */
+    /* margin-left: 0 !important; */
+    /* overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important; */
+    background-color: red !important;
+    /* TODO change this */
+    /* width: 794px !important;
+    height: 1123px !important;
+    min-width: 794px !important;
+    min-height: 1123px !important;
+    max-width: 794px !important;
+    max-height: 1123px !important; */
   }
 
   .page {
+    /* TODO debug this */
+    /* size: A4 portrait !important; */
     print-color-adjust: exact;
+    /* overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important; */
+    background-color: green !important;
+    /* width: 792px !important;
+    height: 1121px !important;
+    min-width: 792px !important;
+    min-height: 1121px !important;
+    max-width: 792px !important;
+    max-height: 1121px !important; */
+  }
+
+  @page {
+    /* size: A4 portrait !important; */
+    size: 210mm 297mm !important;
+    /* size: A5 portrait !important; */
   }
 
   /*
@@ -255,7 +289,14 @@ onBeforeUnmount(() => {
 }
 
 @page {
-  margin: 0;
+  margin: 0 !important;
+  /* TODO change this */
+  /* width: 210mm !important;
+  height: 297mm !important;
+  min-width: 210mm !important;
+  min-height: 297mm !important;
+  max-width: 210mm !important;
+  max-height: 297mm !important; */
 }
 
 @font-face {

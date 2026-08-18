@@ -107,7 +107,7 @@
                           :min="1"
                           :max="10000"
                           :step="marginStep"
-                          :format-options="fraction2FormatOptions"
+                          :format-options="fraction3FormatOptions"
                           @update:model-value="updatePageSize"
                         />
                         <span class="text-xs text-muted-foreground">
@@ -132,7 +132,7 @@
                           :min="1"
                           :max="10000"
                           :step="marginStep"
-                          :format-options="fraction2FormatOptions"
+                          :format-options="fraction3FormatOptions"
                           @update:model-value="updatePageSize"
                         />
                         <span class="text-xs text-muted-foreground">

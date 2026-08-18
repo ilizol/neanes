@@ -893,13 +893,21 @@ async function exportWorkspaceAsPdf(
     if (silentPdf) {
       try {
         const data = await win.webContents.printToPDF({
-          pageSize: getPageSize(
-            args.pageSize,
-            args.pageWidthInches,
-            args.pageHeightInches,
-          ),
-          landscape: args.landscape,
+          // pageSize: getPageSize(
+          //   args.pageSize,
+          //   args.pageWidthInches,
+          //   args.pageHeightInches,
+          // ),
+          // landscape: args.landscape,
+          //TODO debug this
           printBackground: true,
+          preferCSSPageSize: true,
+          // margins: {
+          //   top: 0,
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          // },
         });
         const newPath = replaceExtension(args.filePath!, 'pdf');
 
@@ -944,13 +952,21 @@ async function exportWorkspaceAsPdf(
 
       if (doWrite) {
         const data = await win.webContents.printToPDF({
-          pageSize: getPageSize(
-            args.pageSize,
-            args.pageWidthInches,
-            args.pageHeightInches,
-          ),
-          landscape: args.landscape,
+          // pageSize: getPageSize(
+          //   args.pageSize,
+          //   args.pageWidthInches,
+          //   args.pageHeightInches,
+          // ),
+          // landscape: args.landscape,
+          //TODO debug this
           printBackground: true,
+          preferCSSPageSize: true,
+          // margins: {
+          //   top: 0,
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          // },
         });
         await fs.writeFile(filePath, data);
 
